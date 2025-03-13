@@ -1,0 +1,65 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 242, 242, 242;
+  --background-start-rgb: 13, 13, 13;
+  --background-end-rgb: 13, 13, 13;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+  min-height: 100vh;
+}
+
+/* Typography styles similar to Hello Down There site */
+h1, h2, h3, h4, h5, h6 {
+  @apply font-display uppercase tracking-wider;
+}
+
+.outlined-text {
+  -webkit-text-stroke: 2px #F2F2F2;
+  color: transparent;
+}
+
+.huge-text {
+  @apply font-display text-8xl md:text-9xl uppercase tracking-tight leading-none;
+}
+
+.title-text {
+  @apply font-title text-4xl md:text-6xl;
+}
+
+/* Custom cyberpunk-inspired styles */
+@layer components {
+  .neon-button {
+    @apply px-6 py-3 bg-transparent border-2 border-primary text-white font-bold transition-all hover:bg-primary hover:text-white hover:shadow-[0_0_15px_rgba(242,12,31,0.7)] duration-300 uppercase tracking-super font-display;
+  }
+  
+  .neon-border {
+    @apply border-2 border-secondary shadow-[0_0_10px_rgba(191,17,32,0.5)];
+  }
+  
+  .cyberpunk-card {
+    @apply bg-dark bg-opacity-70 backdrop-blur-sm border-l-4 border-primary p-6 transition-all hover:shadow-[0_0_20px_rgba(242,12,31,0.3)];
+  }
+
+  .stacked-text {
+    @apply relative inline-block;
+  }
+
+  .stacked-text span:first-child {
+    @apply absolute -top-1 -left-1 text-primary opacity-70;
+  }
+
+  .stacked-text span:last-child {
+    @apply relative z-10;
+  }
+} 
