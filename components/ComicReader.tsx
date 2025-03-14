@@ -3,14 +3,45 @@
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 
-// Define the comic pages
+// Define the comic pages - now using the high-quality issue-one pages
 const COMIC_PAGES = [
-  { src: '/images/comic-intro.jpg', alt: 'Comic Page 1' },
-  { src: '/images/comic-intro-2.jpg', alt: 'Comic Page 2' },
-  { src: '/images/comic-intro-3.jpg', alt: 'Comic Page 3' },
-  { src: '/images/comic-intro-4.jpg', alt: 'Comic Page 4' },
-  { src: '/images/comic-intro-5.jpg', alt: 'Comic Page 5' },
-  { src: '/images/comic-intro-6.jpg', alt: 'Comic Page 6' },
+  { src: '/images/issue-one/Page#1 - Final.png', alt: 'Page 1' },
+  { src: '/images/issue-one/Page#2 - Final.png', alt: 'Page 2' },
+  { src: '/images/issue-one/Page#3 - Final.png', alt: 'Page 3' },
+  { src: '/images/issue-one/Page#4 - Fixed.png', alt: 'Page 4' },
+  { src: '/images/issue-one/Page#5 - Final.png', alt: 'Page 5' },
+  { src: '/images/issue-one/Page#6 - Final.png', alt: 'Page 6' },
+  { src: '/images/issue-one/Page#7 - Final.png', alt: 'Page 7' },
+  { src: '/images/issue-one/Page#8 - Final.png', alt: 'Page 8' },
+  { src: '/images/issue-one/Page#9 - Final.png', alt: 'Page 9' },
+  { src: '/images/issue-one/Page#10-Final.png', alt: 'Page 10' },
+  { src: '/images/issue-one/Page#11-Final.png', alt: 'Page 11' },
+  { src: '/images/issue-one/Page#12 - Final.png', alt: 'Page 12' },
+  { src: '/images/issue-one/Page#13 - Final.png', alt: 'Page 13' },
+  { src: '/images/issue-one/Page#14 - Final.png', alt: 'Page 14' },
+  { src: '/images/issue-one/Page#15 - Final.png', alt: 'Page 15' },
+  { src: '/images/issue-one/Page#16 - Final.png', alt: 'Page 16' },
+  { src: '/images/issue-one/Page#17 - Final.png', alt: 'Page 17' },
+  { src: '/images/issue-one/Page#18 - FINAL.png', alt: 'Page 18' },
+  { src: '/images/issue-one/Page#19 - Final.png', alt: 'Page 19' },
+  // Missing page 20 in the folder, need to confirm if this is intentional
+  { src: '/images/issue-one/Page#21 - Final.png', alt: 'Page 21' },
+  { src: '/images/issue-one/Page#22 - FINAL.png', alt: 'Page 22' },
+  { src: '/images/issue-one/Page#23 - Final.png', alt: 'Page 23' },
+  { src: '/images/issue-one/Page#24 - FINAL.png', alt: 'Page 24' },
+  { src: '/images/issue-one/Page#25 - FINAL.png', alt: 'Page 25' },
+  { src: '/images/issue-one/Page#26 - Final.png', alt: 'Page 26' },
+  { src: '/images/issue-one/Page#27 - FINAL.png', alt: 'Page 27' },
+  { src: '/images/issue-one/Page#28 - FINAL.png', alt: 'Page 28' },
+  { src: '/images/issue-one/Page#29 - Final.png', alt: 'Page 29' },
+  { src: '/images/issue-one/Page#30 - Final.png', alt: 'Page 30' },
+  { src: '/images/issue-one/Page#31 - FINAL.png', alt: 'Page 31' },
+  { src: '/images/issue-one/Page#32 - Final.png', alt: 'Page 32' },
+  { src: '/images/issue-one/Page#33 - FINAL.png', alt: 'Page 33' },
+  { src: '/images/issue-one/Page#34 - FINAL.png', alt: 'Page 34' },
+  { src: '/images/issue-one/Page#35 - FINAL.png', alt: 'Page 35' },
+  { src: '/images/issue-one/Page#36 - FINAL.png', alt: 'Page 36' },
+  { src: '/images/issue-one/Page#37 - FINAL.png', alt: 'Page 37' },
 ];
 
 const ComicReader = () => {
@@ -18,6 +49,8 @@ const ComicReader = () => {
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isSpreadView, setIsSpreadView] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [visiblePages, setVisiblePages] = useState<number[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
   const readerRef = useRef<HTMLDivElement>(null);
   const totalPages = COMIC_PAGES.length;
@@ -49,6 +82,32 @@ const ComicReader = () => {
     }
   };
 
+  // Preload adjacent pages for smoother navigation
+  useEffect(() => {
+    const pagesToShow = getCurrentPages();
+    const pagesToPreload = new Set([...pagesToShow]);
+    
+    // Add previous and next pages to preload list
+    if (currentPage > 0) {
+      pagesToPreload.add(currentPage - 1);
+    }
+    if (currentPage < totalPages - 1) {
+      pagesToPreload.add(currentPage + 1);
+    }
+    
+    // For spread view, add more adjacent pages
+    if (isSpreadView) {
+      if (currentPage > 1) {
+        pagesToPreload.add(currentPage - 2);
+      }
+      if (currentPage < totalPages - 2) {
+        pagesToPreload.add(currentPage + 2);
+      }
+    }
+    
+    setVisiblePages(Array.from(pagesToPreload));
+  }, [currentPage, isSpreadView, totalPages]);
+
   // Calculate optimal dimensions based on viewport and container
   const calculateDimensions = () => {
     if (!containerRef.current) return;
@@ -67,8 +126,9 @@ const ComicReader = () => {
     const maxWidth = isFullscreen ? availableWidth : Math.min(availableWidth, 1200);
     const maxHeight = isFullscreen ? availableHeight : Math.min(availableHeight, 800);
     
-    // Default comic aspect ratio (height/width) is around 1.5
-    const singlePageAspectRatio = 1.5;
+    // Default comic aspect ratio (height/width) for these high-res pages is closer to 1.4
+    // Measured from the actual PNG dimensions which are typically ~2560x3600px
+    const singlePageAspectRatio = 1.4;
     
     // For spread view, the width is doubled while height stays the same
     // This creates a landscape-oriented container for two pages side by side
@@ -221,7 +281,7 @@ const ComicReader = () => {
       >
         {/* Comic Reader Header */}
         <div className={`flex justify-between items-center mb-4 p-4 bg-darker ${isFullscreen ? 'mx-4 rounded-lg' : ''} relative z-20`}>
-          <h2 className="font-display text-2xl text-primary">BLOODLETTER: INTRO</h2>
+          <h2 className="font-display text-2xl text-primary">BLOODLETTER: ISSUE ONE</h2>
           <div className="flex items-center gap-4">
             <div className="font-title text-white">
               {isSpreadView && pagesToShow.length > 1 
@@ -279,6 +339,11 @@ const ComicReader = () => {
               maxWidth: '100%'
             }}
           >
+            {/* Loading indicator */}
+            <div className={`absolute inset-0 flex items-center justify-center z-20 bg-black/70 transition-opacity duration-300 ${isLoading ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+              <div className="text-primary animate-pulse text-xl">Loading...</div>
+            </div>
+            
             {/* Render pages based on current view mode */}
             {pagesToShow.map((pageIndex, i) => (
               <div 
@@ -295,6 +360,8 @@ const ComicReader = () => {
                   className="object-contain"
                   priority={i === 0}
                   sizes={pagesToShow.length > 1 ? "50vw" : "100vw"}
+                  quality={80} // Balance between quality and performance
+                  onLoadingComplete={() => setIsLoading(false)}
                 />
               </div>
             ))}
@@ -349,12 +416,19 @@ const ComicReader = () => {
         {/* Page Navigation Thumbnails - Hidden in fullscreen mode */}
         {!isFullscreen && (
           <div className="mt-6 overflow-x-auto py-4">
-            <div className="flex space-x-4 justify-center">
+            <div className="flex space-x-2 justify-center">
               {COMIC_PAGES.map((page, index) => {
                 // In spread view, highlight both pages of the current spread
                 const isActive = isSpreadView 
                   ? pagesToShow.includes(index)
                   : index === currentPage;
+                
+                // Only render thumbnails for visible pages and a few adjacent ones
+                // This improves performance by not loading all 37 thumbnails at once
+                const shouldRender = visiblePages.includes(index) || 
+                                     Math.abs(index - currentPage) < 3 || 
+                                     index === 0 || 
+                                     index === totalPages - 1;
                 
                 return (
                   <button
@@ -364,12 +438,18 @@ const ComicReader = () => {
                       isActive ? 'border-primary scale-110' : 'border-gray-700 opacity-70'
                     }`}
                   >
-                    <Image
-                      src={page.src}
-                      alt={`Thumbnail ${index + 1}`}
-                      fill
-                      className="object-cover"
-                    />
+                    {shouldRender ? (
+                      <Image
+                        src={page.src}
+                        alt={`Thumbnail ${index + 1}`}
+                        fill
+                        className="object-cover"
+                        sizes="48px"
+                        quality={10} // Low quality is fine for thumbnails
+                      />
+                    ) : (
+                      <div className="absolute inset-0 bg-darker flex items-center justify-center"></div>
+                    )}
                     <div className="absolute inset-0 flex items-center justify-center bg-black/50 text-white font-bold">
                       {index + 1}
                     </div>

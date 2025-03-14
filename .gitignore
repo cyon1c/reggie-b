@@ -47,4 +47,10 @@ next-env.d.ts
 *.avi
 *.flv
 *.mov
-*.wmv 
+*.wmv
+
+# Exclude large comic files from git, but keep the directory structure
+# These will be deployed directly to Vercel
+/public/images/issue-one/*.png
+# Keep a .gitkeep file so the directory structure is preserved
+!/public/images/issue-one/.gitkeep 
