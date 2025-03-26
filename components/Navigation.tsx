@@ -7,12 +7,8 @@ export default function Navigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const navLinks = [
-    { name: 'Home', path: '/' },
-    { name: 'Neo Fortuna', path: '/story' },
-    { name: 'Curator\'s Watchlist', path: '/comics' },
-    { name: 'Field Supplies', path: '/shop' },
-    { name: 'Join the Resistance', path: '/join' },
-    { name: 'Faction Intel', path: '/about' },
+    { name: 'Characters', path: '/characters' },
+    { name: 'About', path: '/about' },
   ];
 
   return (
@@ -45,13 +41,13 @@ export default function Navigation() {
             </div>
           </div>
           
-          {/* Download button (desktop) */}
+          {/* Read The Comic button (desktop) */}
           <div className="hidden md:flex md:items-center">
             <Link 
-              href="/download" 
+              href="/comics" 
               className="neon-button text-base py-2"
             >
-              Access Dispatches
+              Read The Comic
             </Link>
           </div>
           
@@ -91,13 +87,13 @@ export default function Navigation() {
                 {link.name}
               </Link>
             ))}
-            {/* Download button in mobile menu */}
+            {/* Read The Comic button in mobile menu */}
             <Link
-              href="/download"
+              href="/comics"
               className="block px-3 py-4 text-xl font-display tracking-wide text-primary uppercase border-t border-gray-700 mt-4 pt-4"
               onClick={() => setIsMenuOpen(false)}
             >
-              Access Dispatches
+              Read The Comic
             </Link>
           </div>
         </div>
