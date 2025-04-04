@@ -1,6 +1,7 @@
 "use client"
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useState } from 'react';
 
 export default function Navigation() {
@@ -19,9 +20,16 @@ export default function Navigation() {
           <div className="flex-shrink-0 flex items-center">
             <Link 
               href="/" 
-              className="font-display text-3xl text-primary hover:text-white transition-colors tracking-wide"
+              className="hover:opacity-80 transition-opacity"
             >
-              BLOODLETTER
+              <Image 
+                src="/images/bloodletter-logo.png" 
+                alt="BLOODLETTER" 
+                width={180} 
+                height={40} 
+                className="h-auto"
+                priority
+              />
             </Link>
           </div>
           

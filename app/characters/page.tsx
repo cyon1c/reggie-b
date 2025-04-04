@@ -22,10 +22,6 @@ export default function CharactersPage() {
           <h1 className="text-6xl md:text-7xl font-display mb-6 text-white text-center">
             MEET THE <span className="text-primary">CHARACTERS</span>
           </h1>
-          <p className="text-xl text-white text-center max-w-3xl mx-auto">
-            The inhabitants of Neo Fortuna, each with their own story, 
-            motivations, and role in the city's complex power dynamics.
-          </p>
         </div>
       </section>
 
