@@ -87,19 +87,31 @@ export default function AboutPage() {
       {/* Vision Section */}
       <section className="py-20 bg-darker">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-4xl md:text-5xl font-display mb-12 text-white text-center">
-            Creative <span className="text-primary">Vision</span>
-          </h2>
-          <div className="max-w-3xl mx-auto">
-            <p className="text-xl text-white mb-6 text-center">
-              Bloodletter emerged as a response to Peplinski's desire to create a story that resonates with those who feel like outsiders—people who question authority and fight to define their place in a chaotic world.
-            </p>
-            <p className="text-xl text-white mb-6 text-center">
-              Through Bloodletter, Peplinski aims to connect with creative, tech-savvy individuals who crave storytelling that doesn't shy away from complexity or raw emotion. He invites readers to join the journey, not just as spectators but as allies in the fight for truth and identity.
-            </p>
-            <p className="text-xl text-white text-center">
-              At its heart, Bloodletter is more than just a comic—it's a call to those who see the world differently, who feel caught between societal expectations and personal convictions. Peplinski hopes that through Bloodletter, readers will find inspiration to embrace their own unique paths and stand resilient in the face of adversity.
-            </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <div>
+              <h2 className="text-4xl md:text-5xl font-display mb-6 text-white">
+                Creative <span className="text-primary">Vision</span>
+              </h2>
+              <p className="text-xl text-white mb-6">
+                Bloodletter emerged as a response to Peplinski's desire to create a story that resonates with those who feel like outsiders—people who question authority and fight to define their place in a chaotic world.
+              </p>
+              <p className="text-xl text-white mb-6">
+                Through Bloodletter, Peplinski aims to connect with creative, tech-savvy individuals who crave storytelling that doesn't shy away from complexity or raw emotion. He invites readers to join the journey, not just as spectators but as allies in the fight for truth and identity.
+              </p>
+              <p className="text-xl text-white">
+                At its heart, Bloodletter is more than just a comic—it's a call to those who see the world differently, who feel caught between societal expectations and personal convictions. Peplinski hopes that through Bloodletter, readers will find inspiration to embrace their own unique paths and stand resilient in the face of adversity.
+              </p>
+            </div>
+            <div className="relative rounded-lg overflow-hidden neon-border">
+              <div className="aspect-square">
+                <Image 
+                  src="/images/creavtive_vision.png" 
+                  alt="Creative Vision" 
+                  fill 
+                  className="object-cover"
+                />
+              </div>
+            </div>
           </div>
         </div>
       </section>
