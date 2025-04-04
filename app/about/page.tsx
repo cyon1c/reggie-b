@@ -20,132 +20,86 @@ export default function AboutPage() {
         
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="text-6xl md:text-7xl font-display mb-6 text-white text-center">
-            ABOUT <span className="text-primary">BLOODLETTER</span>
+            ABOUT THE <span className="text-primary">CREATOR</span>
           </h1>
-          <p className="text-xl text-white text-center max-w-3xl mx-auto">
-            A cyberpunk comic series that explores the dark underbelly of Neo Fortuna, 
-            where justice is a commodity and survival is the only law.
-          </p>
         </div>
       </section>
 
-      {/* Story Section */}
+      {/* Creator Bio Section */}
       <section className="py-20 bg-darker">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div>
               <h2 className="text-4xl md:text-5xl font-display mb-6 text-white">
-                The <span className="text-primary">Story</span>
+                Brenton <span className="text-primary">Peplinski</span>
               </h2>
               <p className="text-xl text-white mb-6">
-                Set in the sprawling metropolis of Neo Fortuna on Kepler-2, BLOODLETTER follows 
-                the journey of a cybernetically enhanced guide navigating the city's treacherous 
-                streets. In a world where corruption runs deep and justice is a forgotten concept, 
-                our protagonist battles both external threats and internal demons.
+                Brenton Peplinski, the creative force behind the Bloodletter comic series, draws from a diverse background that uniquely positions him to craft this immersive and gritty cyberpunk narrative. With a foundation rooted in military experience, Peplinski understands themes of resilience, discipline, and the struggle for survival, which permeate the dystopian world of Neo Fortuna.
               </p>
               <p className="text-xl text-white">
-                The series explores themes of redemption, survival, and the cost of justice in a 
-                world where the line between right and wrong is as blurred as the neon-lit streets.
+                His years of artistic practice—spanning illustration, graphic design, and storytelling—provide the visual and narrative depth that define the Bloodletter series.
               </p>
             </div>
-            <div className="relative aspect-square rounded-lg overflow-hidden neon-border">
-              <Image 
-                src="/images/reggie.jpg" 
-                alt="Bloodletter character" 
-                fill 
-                className="object-cover"
-              />
+            <div className="relative rounded-lg overflow-hidden neon-border">
+              <div className="aspect-square">
+                <Image 
+                  src="/images/reggie-irl.jpg" 
+                  alt="Brenton Peplinski" 
+                  fill 
+                  className="object-cover"
+                />
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Mission Section */}
+      {/* Creator Journey Section */}
       <section className="py-20 bg-dark">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            <div className="relative aspect-square rounded-lg overflow-hidden neon-border order-2 md:order-1">
-              <Image 
-                src="/images/commandant-warden.jpg" 
-                alt="The Wardens" 
-                fill 
-                className="object-cover"
-              />
+            <div className="relative rounded-lg overflow-hidden order-2 md:order-1">
+              <div className="relative w-full h-auto" style={{ paddingBottom: '75%' }}>
+                <Image 
+                  src="/images/reggie.jpg" 
+                  alt="Bloodletter character artwork" 
+                  fill 
+                  className="object-contain"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
+              </div>
             </div>
             <div className="order-1 md:order-2">
               <h2 className="text-4xl md:text-5xl font-display mb-6 text-white">
-                Our <span className="text-primary">Mission</span>
+                The <span className="text-primary">Journey</span>
               </h2>
               <p className="text-xl text-white mb-6">
-                BLOODLETTER aims to push the boundaries of cyberpunk storytelling, creating a 
-                rich, immersive world that challenges readers to question their own moral 
-                compass. Through stunning artwork and compelling narrative, we seek to 
-                transport readers to the heart of Neo Fortuna.
+                Peplinksi's journey into storytelling began long before Bloodletter. From crafting short films and visual projects to designing complex characters and worlds, his passion for blending visuals with deep, emotionally driven narratives has always been at the core of his work.
               </p>
-              <p className="text-xl text-white">
-                Each issue is crafted with meticulous attention to detail, from the 
-                cyberpunk-inspired character designs to the intricate world-building that 
-                brings Neo Fortuna to life.
+              <p className="text-xl text-white mb-6">
+                As a long-time fan of cyberpunk aesthetics, he has immersed himself in the genre, absorbing its visual language and themes of societal collapse and resistance. This personal connection to the world of cyberpunk not only informs his artistic choices but also drives his commitment to crafting stories that challenge conventional narratives.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Team Section */}
+      {/* Vision Section */}
       <section className="py-20 bg-darker">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-4xl md:text-5xl font-display mb-12 text-white text-center">
-            The <span className="text-primary">Team</span>
+            Creative <span className="text-primary">Vision</span>
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Team Member 1 */}
-            <div className="cyberpunk-card">
-              <div className="aspect-square mb-6 relative overflow-hidden">
-                <Image 
-                  src="/images/detective-bounty-hunter.jpg" 
-                  alt="Team Member 1" 
-                  fill 
-                  className="object-cover"
-                />
-              </div>
-              <h3 className="text-2xl text-primary font-display mb-2">CREATOR</h3>
-              <p className="text-xl text-white font-title">
-                "The vision behind BLOODLETTER, bringing Neo Fortuna to life through words and art."
-              </p>
-            </div>
-
-            {/* Team Member 2 */}
-            <div className="cyberpunk-card">
-              <div className="aspect-square mb-6 relative overflow-hidden">
-                <Image 
-                  src="/images/m4jor-warden.jpg" 
-                  alt="Team Member 2" 
-                  fill 
-                  className="object-cover"
-                />
-              </div>
-              <h3 className="text-2xl text-primary font-display mb-2">ARTIST</h3>
-              <p className="text-xl text-white font-title">
-                "Crafting the visual world of Neo Fortuna with stunning detail and cyberpunk aesthetics."
-              </p>
-            </div>
-
-            {/* Team Member 3 */}
-            <div className="cyberpunk-card">
-              <div className="aspect-square mb-6 relative overflow-hidden">
-                <Image 
-                  src="/images/herald-of-the-cult-of-the-pineapple-god-bounty.jpg" 
-                  alt="Team Member 3" 
-                  fill 
-                  className="object-cover"
-                />
-              </div>
-              <h3 className="text-2xl text-primary font-display mb-2">EDITOR</h3>
-              <p className="text-xl text-white font-title">
-                "Ensuring every page of BLOODLETTER maintains the highest quality and impact."
-              </p>
-            </div>
+          <div className="max-w-3xl mx-auto">
+            <p className="text-xl text-white mb-6 text-center">
+              Bloodletter emerged as a response to Peplinski's desire to create a story that resonates with those who feel like outsiders—people who question authority and fight to define their place in a chaotic world.
+            </p>
+            <p className="text-xl text-white mb-6 text-center">
+              Through Bloodletter, Peplinski aims to connect with creative, tech-savvy individuals who crave storytelling that doesn't shy away from complexity or raw emotion. He invites readers to join the journey, not just as spectators but as allies in the fight for truth and identity.
+            </p>
+            <p className="text-xl text-white text-center">
+              At its heart, Bloodletter is more than just a comic—it's a call to those who see the world differently, who feel caught between societal expectations and personal convictions. Peplinski hopes that through Bloodletter, readers will find inspiration to embrace their own unique paths and stand resilient in the face of adversity.
+            </p>
           </div>
         </div>
       </section>
@@ -162,14 +116,16 @@ export default function AboutPage() {
         </div>
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-4xl md:text-5xl font-display mb-8 text-white">
-            Join the <span className="text-primary">Resistance</span>
+            Connect with <span className="text-primary">Brenton</span>
           </h2>
           <p className="text-xl text-white mb-12">
-            Be part of the BLOODLETTER universe. Subscribe to our newsletter for exclusive 
-            updates, behind-the-scenes content, and early access to new issues.
+            Follow Brenton's creative journey and get exclusive behind-the-scenes content, development updates, and early access to new Bloodletter materials.
           </p>
-          <a href="/shop" className="neon-button text-xl py-4 px-10">
-            Get Started
+          <a href="/contact" className="neon-button text-xl py-4 px-10 mr-4 mb-4 inline-block">
+            Contact
+          </a>
+          <a href="/shop" className="neon-button text-xl py-4 px-10 mb-4 inline-block">
+            Support the Comic
           </a>
         </div>
       </section>
