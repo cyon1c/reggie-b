@@ -145,17 +145,20 @@ export default function Home() {
       {/* Citizen's Unite Section */}
       <section className="py-24 bg-dark">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-6xl font-display mb-10 text-white text-center">citizen's unite</h2>
+          <h2 className="text-6xl font-display mb-10 text-center">
+            <span className="text-white">Citizen's </span>
+            <span className="text-primary">Unite</span>
+          </h2>
           <p className="text-center text-2xl text-white mb-16 max-w-3xl mx-auto font-title">
-            choose your network wisely. the means of communication can define your allegiance in neo fortuna.
+            Choose your network wisely. The means of communication can define your allegiance in Neo Fortuna.
           </p>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
             {/* Common Channels */}
             <div className="bg-darker p-8 rounded-lg border border-gray-800">
-              <h3 className="text-3xl text-primary font-display mb-4 text-center">common channels</h3>
+              <h3 className="text-3xl text-primary font-display mb-4 text-center">Common Channels</h3>
               <p className="text-xl text-white mb-6 text-center">
-                government-monitored networks ripe with propaganda and regulated information. safe for public consumption, but limited in truth.
+                Government-monitored networks ripe with propaganda and regulated information. Safe for public consumption, but limited in truth.
               </p>
               <div className="grid grid-cols-2 gap-4 mb-8">
                 <div className="bg-black/40 p-4 rounded-lg flex flex-col items-center justify-center">
@@ -164,29 +167,28 @@ export default function Home() {
                       <path fillRule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clipRule="evenodd" />
                     </svg>
                   </div>
-                  <p className="text-white text-center">warden-approved social feeds</p>
+                  <Link href="https://www.facebook.com/profile.php?id=100078873968786" target="_blank" rel="noopener noreferrer" className="text-white hover:text-primary transition-colors text-center border border-primary px-4 py-2 w-full hover:bg-black/30 flex items-center justify-center min-h-[60px]">
+                    Warden-approved Social Feeds
+                  </Link>
                 </div>
                 <div className="bg-black/40 p-4 rounded-lg flex flex-col items-center justify-center">
                   <div className="text-primary mb-4">
                     <svg className="h-16 w-16" fill="currentColor" viewBox="0 0 24 24">
-                      <path fillRule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465.668.25 1.234.585 1.797 1.148.563.563.898 1.13 1.148 1.797.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.148 1.797c-.563.563-1.13.898-1.797 1.148-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.797-1.148 4.902 4.902 0 01-1.148-1.797c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427.25-.668.585-1.234 1.148-1.797.563-.563 1.13-.898 1.797-1.148.636-.247 1.363-.416 2.427-.465C9.516 2.013 9.871 2 12.315 2z" clipRule="evenodd" />
+                      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
                     </svg>
                   </div>
-                  <p className="text-white text-center">public entertainment networks</p>
+                  <Link href="https://www.instagram.com/brentonpeplinski_art/" target="_blank" rel="noopener noreferrer" className="text-white hover:text-primary transition-colors text-center border border-primary px-4 py-2 w-full hover:bg-black/30 flex items-center justify-center min-h-[60px]">
+                    Public Entertainment Networks
+                  </Link>
                 </div>
-              </div>
-              <div className="text-center">
-                <Link href="https://www.instagram.com/brentonpeplinski_art/" className="neon-button text-lg" target="_blank" rel="noopener noreferrer">
-                  browse common channels
-                </Link>
               </div>
             </div>
             
             {/* Secure Channels */}
-            <div className="bg-darker p-8 rounded-lg border border-primary/30">
-              <h3 className="text-3xl text-primary font-display mb-4 text-center">secure channels</h3>
+            <div className="bg-darker p-8 rounded-lg border border-blue-400 shadow-[0_0_10px_rgba(59,130,246,0.5)]">
+              <h3 className="text-3xl text-primary font-display mb-4 text-center">Secure Channels</h3>
               <p className="text-xl text-white mb-6 text-center">
-                encrypted communications for those ready to stand for justice. beyond warden surveillance, where the resistance shares unfiltered truth.
+                Encrypted communications for those ready to stand for justice. Beyond warden surveillance, where the resistance shares unfiltered truth.
               </p>
               <div className="grid grid-cols-2 gap-4 mb-8">
                 <div className="bg-black/40 p-4 rounded-lg flex flex-col items-center justify-center">
@@ -195,7 +197,9 @@ export default function Home() {
                       <path d="M60.1045 4.8978C55.5792 2.8214 50.7265 1.2916 45.6527 0.41542C45.5603 0.39851 45.468 0.440769 45.4204 0.525289C44.7963 1.6353 44.105 3.0834 43.6209 4.2216C38.1637 3.4046 32.7345 3.4046 27.3892 4.2216C26.905 3.0581 26.1886 1.6353 25.5617 0.525289C25.5141 0.443589 25.4218 0.40133 25.3294 0.41542C20.2584 1.2888 15.4057 2.8186 10.8776 4.8978C10.8384 4.9147 10.8048 4.9429 10.7825 4.9795C1.57795 18.7309 -0.943561 32.1443 0.293408 45.3914C0.299005 45.4562 0.335386 45.5182 0.385761 45.5576C6.45866 50.0174 12.3413 52.7249 18.1147 54.5195C18.2071 54.5477 18.305 54.5139 18.3638 54.4378C19.7295 52.5728 20.9469 50.6063 21.9907 48.5383C22.0523 48.4172 21.9935 48.2735 21.8676 48.2256C19.9366 47.4931 18.0979 46.6 16.3292 45.5858C16.1893 45.5041 16.1781 45.304 16.3068 45.2082C16.679 44.9293 17.0513 44.6391 17.4067 44.3461C17.471 44.2926 17.5606 44.2813 17.6362 44.3151C29.2558 49.6202 41.8354 49.6202 53.3179 44.3151C53.3935 44.2785 53.4831 44.2898 53.5502 44.3433C53.9057 44.6363 54.2779 44.9293 54.6529 45.2082C54.7816 45.304 54.7732 45.5041 54.6333 45.5858C52.8646 46.6197 51.0259 47.4931 49.0921 48.2228C48.9662 48.2707 48.9102 48.4172 48.9718 48.5383C50.038 50.6034 51.2554 52.5699 52.5959 54.435C52.6519 54.5139 52.7526 54.5477 52.845 54.5195C58.6464 52.7249 64.529 50.0174 70.6019 45.5576C70.6551 45.5182 70.6887 45.459 70.6943 45.3942C72.1747 30.0791 68.2147 16.7757 60.1968 4.9823C60.1772 4.9429 60.1437 4.9147 60.1045 4.8978ZM23.7259 37.3253C20.2276 37.3253 17.3451 34.1136 17.3451 30.1693C17.3451 26.225 20.1717 23.0133 23.7259 23.0133C27.308 23.0133 30.1626 26.2532 30.1066 30.1693C30.1066 34.1136 27.28 37.3253 23.7259 37.3253ZM47.3178 37.3253C43.8196 37.3253 40.9371 34.1136 40.9371 30.1693C40.9371 26.225 43.7636 23.0133 47.3178 23.0133C50.9 23.0133 53.7545 26.2532 53.6986 30.1693C53.6986 34.1136 50.9 37.3253 47.3178 37.3253Z" />
                     </svg>
                   </div>
-                  <p className="text-white text-center">encrypted resistance comms</p>
+                  <Link href="https://discord.gg" target="_blank" rel="noopener noreferrer" className="text-white hover:text-primary transition-colors text-center border border-primary px-4 py-2 w-full hover:bg-black/30 flex items-center justify-center min-h-[60px]">
+                    Encrypted Resistance Comms
+                  </Link>
                 </div>
                 <div className="bg-black/40 p-4 rounded-lg flex flex-col items-center justify-center">
                   <div className="text-primary mb-4">
@@ -204,13 +208,10 @@ export default function Home() {
                       <path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z" />
                     </svg>
                   </div>
-                  <p className="text-white text-center">direct intel exchanges</p>
+                  <Link href="mailto:brenton.peplinski@yahoo.com" className="text-white hover:text-primary transition-colors text-center border border-primary px-4 py-2 w-full hover:bg-black/30 flex items-center justify-center min-h-[60px]">
+                    Direct Intel Exchanges
+                  </Link>
                 </div>
-              </div>
-              <div className="text-center">
-                <Link href="mailto:brenton.peplinski@yahoo.com" className="neon-button text-lg">
-                  access secure channels
-                </Link>
               </div>
             </div>
           </div>
