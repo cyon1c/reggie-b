@@ -401,7 +401,7 @@ const ComicReader = () => {
                   priority={i === 0}
                   sizes={pagesToShow.length > 1 ? "50vw" : "100vw"}
                   quality={80} // Balance between quality and performance
-                  onLoadingComplete={() => setIsLoading(false)}
+                  onLoad={() => setIsLoading(false)}
                   unoptimized // Use this for external images from Vercel storage
                 />
               </div>
