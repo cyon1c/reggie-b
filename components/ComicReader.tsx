@@ -55,6 +55,8 @@ const ComicReader = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const readerRef = useRef<HTMLDivElement>(null);
   const totalPages = COMIC_PAGES.length;
+  // The actual page count is one more than the array length because Page11-12.webp counts as two pages
+  const actualPageCount = totalPages + 1;
 
   // Get current displayed pages based on view mode
   const getCurrentPages = () => {
@@ -356,8 +358,10 @@ const ComicReader = () => {
           <div className="flex items-center gap-4">
             <div className="font-title text-white">
               {isSpreadView && pagesToShow.length > 1 
-                ? `Pages ${pagesToShow[0] + 1}-${pagesToShow[1] + 1} of ${totalPages}` 
-                : `Page ${currentPage + 1} of ${totalPages}`
+                ? `Pages ${pagesToShow[0] + 1}-${pagesToShow[1] + 1} of ${actualPageCount}` 
+                : currentPage === 10
+                  ? `Pages 11-12 of ${actualPageCount}`
+                  : `Page ${currentPage + 1} of ${actualPageCount}`
               }
             </div>
             
@@ -530,7 +534,7 @@ const ComicReader = () => {
                       <div className="absolute inset-0 bg-darker flex items-center justify-center"></div>
                     )}
                     <div className="absolute inset-0 flex items-center justify-center bg-black/50 text-white font-bold">
-                      {index + 1}
+                      {index === 10 ? '11-12' : index + 1}
                     </div>
                   </button>
                 );
