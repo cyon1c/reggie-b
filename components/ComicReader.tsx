@@ -544,7 +544,7 @@ const ComicReader = () => {
                       <div className="absolute inset-0 bg-darker flex items-center justify-center"></div>
                     )}
                     <div className="absolute inset-0 flex items-center justify-center bg-black/50 text-white font-bold">
-                      {index === 10 ? 'P11-12' : index > 10 ? `P${index + 2}` : `P${index + 1}`}
+                      {index === 10 ? '11-12' : index > 10 ? `${index + 2}` : `${index + 1}`}
                     </div>
                   </button>
                 );
