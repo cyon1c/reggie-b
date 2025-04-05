@@ -133,9 +133,6 @@ export default function AboutPage() {
           <p className="text-xl text-white mb-12">
             Follow Brenton's creative journey and get exclusive behind-the-scenes content, development updates, and early access to new Bloodletter materials.
           </p>
-          <a href="/comics" className="neon-button text-xl py-4 px-10 mr-4 mb-4 inline-block">
-            Read the Comic
-          </a>
           <a href="mailto:brenton.peplinski@yahoo.com?subject=Contact%20from%20About%20Page" className="neon-button text-xl py-4 px-10 mr-4 mb-4 inline-block">
             Contact
           </a>
