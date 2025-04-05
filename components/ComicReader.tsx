@@ -3,44 +3,46 @@
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 
-// Define the comic pages - now using the high-quality issue-one pages
+// Define the comic pages - now using Vercel storage URLs
+const VERCEL_STORAGE_URL = 'https://first-comic.vercel-storage.com';
+
 const COMIC_PAGES = [
-  { src: '/images/issue-one/Page1.webp', alt: 'Page 1' },
-  { src: '/images/issue-one/Page2.webp', alt: 'Page 2' },
-  { src: '/images/issue-one/Page3.webp', alt: 'Page 3' },
-  { src: '/images/issue-one/Page4.webp', alt: 'Page 4' },
-  { src: '/images/issue-one/Page5.webp', alt: 'Page 5' },
-  { src: '/images/issue-one/Page6.webp', alt: 'Page 6' },
-  { src: '/images/issue-one/Page7.webp', alt: 'Page 7' },
-  { src: '/images/issue-one/Page8.webp', alt: 'Page 8' },
-  { src: '/images/issue-one/Page9.webp', alt: 'Page 9' },
-  { src: '/images/issue-one/Page10.webp', alt: 'Page 10' },
-  { src: '/images/issue-one/Page11-12.webp', alt: 'Pages 11-12' },
-  { src: '/images/issue-one/Page13.webp', alt: 'Page 13' },
-  { src: '/images/issue-one/Page14.webp', alt: 'Page 14' },
-  { src: '/images/issue-one/Page15.webp', alt: 'Page 15' },
-  { src: '/images/issue-one/Page16.webp', alt: 'Page 16' },
-  { src: '/images/issue-one/Page17.webp', alt: 'Page 17' },
-  { src: '/images/issue-one/Page18.webp', alt: 'Page 18' },
-  { src: '/images/issue-one/Page19.webp', alt: 'Page 19' },
-  { src: '/images/issue-one/Page20.webp', alt: 'Page 20' },
-  { src: '/images/issue-one/Page21.webp', alt: 'Page 21' },
-  { src: '/images/issue-one/Page22.webp', alt: 'Page 22' },
-  { src: '/images/issue-one/Page23.webp', alt: 'Page 23' },
-  { src: '/images/issue-one/Page24.webp', alt: 'Page 24' },
-  { src: '/images/issue-one/Page25.webp', alt: 'Page 25' },
-  { src: '/images/issue-one/Page26.webp', alt: 'Page 26' },
-  { src: '/images/issue-one/Page27.webp', alt: 'Page 27' },
-  { src: '/images/issue-one/Page28.webp', alt: 'Page 28' },
-  { src: '/images/issue-one/Page29.webp', alt: 'Page 29' },
-  { src: '/images/issue-one/Page30.webp', alt: 'Page 30' },
-  { src: '/images/issue-one/Page31.webp', alt: 'Page 31' },
-  { src: '/images/issue-one/Page32.webp', alt: 'Page 32' },
-  { src: '/images/issue-one/Page33.webp', alt: 'Page 33' },
-  { src: '/images/issue-one/Page34.webp', alt: 'Page 34' },
-  { src: '/images/issue-one/Page35.webp', alt: 'Page 35' },
-  { src: '/images/issue-one/Page36.webp', alt: 'Page 36' },
-  { src: '/images/issue-one/Page37.webp', alt: 'Page 37' },
+  { src: `${VERCEL_STORAGE_URL}/issue-one/Page1.webp`, alt: 'Page 1' },
+  { src: `${VERCEL_STORAGE_URL}/issue-one/Page2.webp`, alt: 'Page 2' },
+  { src: `${VERCEL_STORAGE_URL}/issue-one/Page3.webp`, alt: 'Page 3' },
+  { src: `${VERCEL_STORAGE_URL}/issue-one/Page4.webp`, alt: 'Page 4' },
+  { src: `${VERCEL_STORAGE_URL}/issue-one/Page5.webp`, alt: 'Page 5' },
+  { src: `${VERCEL_STORAGE_URL}/issue-one/Page6.webp`, alt: 'Page 6' },
+  { src: `${VERCEL_STORAGE_URL}/issue-one/Page7.webp`, alt: 'Page 7' },
+  { src: `${VERCEL_STORAGE_URL}/issue-one/Page8.webp`, alt: 'Page 8' },
+  { src: `${VERCEL_STORAGE_URL}/issue-one/Page9.webp`, alt: 'Page 9' },
+  { src: `${VERCEL_STORAGE_URL}/issue-one/Page10.webp`, alt: 'Page 10' },
+  { src: `${VERCEL_STORAGE_URL}/issue-one/Page11-12.webp`, alt: 'Pages 11-12' },
+  { src: `${VERCEL_STORAGE_URL}/issue-one/Page13.webp`, alt: 'Page 13' },
+  { src: `${VERCEL_STORAGE_URL}/issue-one/Page14.webp`, alt: 'Page 14' },
+  { src: `${VERCEL_STORAGE_URL}/issue-one/Page15.webp`, alt: 'Page 15' },
+  { src: `${VERCEL_STORAGE_URL}/issue-one/Page16.webp`, alt: 'Page 16' },
+  { src: `${VERCEL_STORAGE_URL}/issue-one/Page17.webp`, alt: 'Page 17' },
+  { src: `${VERCEL_STORAGE_URL}/issue-one/Page18.webp`, alt: 'Page 18' },
+  { src: `${VERCEL_STORAGE_URL}/issue-one/Page19.webp`, alt: 'Page 19' },
+  { src: `${VERCEL_STORAGE_URL}/issue-one/Page20.webp`, alt: 'Page 20' },
+  { src: `${VERCEL_STORAGE_URL}/issue-one/Page21.webp`, alt: 'Page 21' },
+  { src: `${VERCEL_STORAGE_URL}/issue-one/Page22.webp`, alt: 'Page 22' },
+  { src: `${VERCEL_STORAGE_URL}/issue-one/Page23.webp`, alt: 'Page 23' },
+  { src: `${VERCEL_STORAGE_URL}/issue-one/Page24.webp`, alt: 'Page 24' },
+  { src: `${VERCEL_STORAGE_URL}/issue-one/Page25.webp`, alt: 'Page 25' },
+  { src: `${VERCEL_STORAGE_URL}/issue-one/Page26.webp`, alt: 'Page 26' },
+  { src: `${VERCEL_STORAGE_URL}/issue-one/Page27.webp`, alt: 'Page 27' },
+  { src: `${VERCEL_STORAGE_URL}/issue-one/Page28.webp`, alt: 'Page 28' },
+  { src: `${VERCEL_STORAGE_URL}/issue-one/Page29.webp`, alt: 'Page 29' },
+  { src: `${VERCEL_STORAGE_URL}/issue-one/Page30.webp`, alt: 'Page 30' },
+  { src: `${VERCEL_STORAGE_URL}/issue-one/Page31.webp`, alt: 'Page 31' },
+  { src: `${VERCEL_STORAGE_URL}/issue-one/Page32.webp`, alt: 'Page 32' },
+  { src: `${VERCEL_STORAGE_URL}/issue-one/Page33.webp`, alt: 'Page 33' },
+  { src: `${VERCEL_STORAGE_URL}/issue-one/Page34.webp`, alt: 'Page 34' },
+  { src: `${VERCEL_STORAGE_URL}/issue-one/Page35.webp`, alt: 'Page 35' },
+  { src: `${VERCEL_STORAGE_URL}/issue-one/Page36.webp`, alt: 'Page 36' },
+  { src: `${VERCEL_STORAGE_URL}/issue-one/Page37.webp`, alt: 'Page 37' },
 ];
 
 const ComicReader = () => {
@@ -400,6 +402,7 @@ const ComicReader = () => {
                   sizes={pagesToShow.length > 1 ? "50vw" : "100vw"}
                   quality={80} // Balance between quality and performance
                   onLoadingComplete={() => setIsLoading(false)}
+                  unoptimized // Use this for external images from Vercel storage
                 />
               </div>
             ))}
@@ -484,6 +487,7 @@ const ComicReader = () => {
                         className="object-cover"
                         sizes="48px"
                         quality={10} // Low quality is fine for thumbnails
+                        unoptimized // Use this for external images from Vercel storage
                       />
                     ) : (
                       <div className="absolute inset-0 bg-darker flex items-center justify-center"></div>
