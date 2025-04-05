@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 
 // Define the comic pages - now using Vercel storage URLs
-const VERCEL_STORAGE_URL = 'https://xacnaqrj5ebpenry.public.blob.vercel-storage.com';
+const VERCEL_STORAGE_URL = 'https://first-comic.vercel-storage.com';
 
 const COMIC_PAGES = [
   { src: `${VERCEL_STORAGE_URL}/issue-one/Page1.webp`, alt: 'Page 1' },
@@ -43,6 +43,12 @@ const COMIC_PAGES = [
   { src: `${VERCEL_STORAGE_URL}/issue-one/Page35.webp`, alt: 'Page 35' },
   { src: `${VERCEL_STORAGE_URL}/issue-one/Page36.webp`, alt: 'Page 36' },
   { src: `${VERCEL_STORAGE_URL}/issue-one/Page37.webp`, alt: 'Page 37' },
+  { src: `${VERCEL_STORAGE_URL}/issue-one/Page38.webp`, alt: 'Page 38' },
+  { src: `${VERCEL_STORAGE_URL}/issue-one/Page39.webp`, alt: 'Page 39' },
+  { src: `${VERCEL_STORAGE_URL}/issue-one/Page40.webp`, alt: 'Page 40' },
+  { src: `${VERCEL_STORAGE_URL}/issue-one/Page41.webp`, alt: 'Page 41' },
+  { src: `${VERCEL_STORAGE_URL}/issue-one/Page42.webp`, alt: 'Page 42' },
+  { src: `${VERCEL_STORAGE_URL}/issue-one/Page43.webp`, alt: 'Page 43' },
 ];
 
 const ComicReader = () => {
@@ -54,7 +60,9 @@ const ComicReader = () => {
   const [visiblePages, setVisiblePages] = useState<number[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
   const readerRef = useRef<HTMLDivElement>(null);
-  const totalPages = COMIC_PAGES.length;
+  const totalPageFiles = COMIC_PAGES.length;
+  // The actual page count is 44 (43 files + 1 extra from the double-page spread)
+  const actualPageCount = 44;
 
   // Get current displayed pages based on view mode
   const getCurrentPages = () => {
@@ -83,7 +91,7 @@ const ComicReader = () => {
       if (currentPage + 1 === 10) {
         return [currentPage];
       }
-      return currentPage + 1 < totalPages 
+      return currentPage + 1 < totalPageFiles 
         ? [currentPage, currentPage + 1] 
         : [currentPage];
     } else {
@@ -105,7 +113,7 @@ const ComicReader = () => {
     if (currentPage > 0) {
       pagesToPreload.add(currentPage - 1);
     }
-    if (currentPage < totalPages - 1) {
+    if (currentPage < totalPageFiles - 1) {
       pagesToPreload.add(currentPage + 1);
     }
     
@@ -114,13 +122,13 @@ const ComicReader = () => {
       if (currentPage > 1) {
         pagesToPreload.add(currentPage - 2);
       }
-      if (currentPage < totalPages - 2) {
+      if (currentPage < totalPageFiles - 2) {
         pagesToPreload.add(currentPage + 2);
       }
     }
     
     setVisiblePages(Array.from(pagesToPreload));
-  }, [currentPage, isSpreadView, totalPages]);
+  }, [currentPage, isSpreadView, totalPageFiles]);
 
   // Calculate optimal dimensions based on viewport and container
   const calculateDimensions = () => {
@@ -144,22 +152,54 @@ const ComicReader = () => {
     // Measured from the actual PNG dimensions which are typically ~2560x3600px
     const singlePageAspectRatio = 1.4;
     
-    // For spread view, the width is doubled while height stays the same
-    // This creates a landscape-oriented container for two pages side by side
-    const spreadViewWidthMultiplier = getCurrentPages().length > 1 ? 2 : 1;
-    const aspectRatio = singlePageAspectRatio / spreadViewWidthMultiplier;
+    // Get the current pages to display
+    const pages = getCurrentPages();
+    
+    // Special handling for the double-page spread (Page11-12.webp at index 10)
+    // Double-page spreads have an aspect ratio that's half of a single page
+    // A single page is taller than wide (1.4:1), a double spread is wider than tall (0.7:1)
+    let spreadViewWidthMultiplier;
+    let aspectRatio;
+    
+    if (pages.length === 1 && pages[0] === 10) {
+      // For the double-page spread, we use a specific aspect ratio
+      // Double-page has approximately half the height:width ratio of a single page
+      aspectRatio = singlePageAspectRatio / 2;
+      // We'll use the height as the limiting factor for the double-page spread
+      // Set a wider multiplier for the container
+      spreadViewWidthMultiplier = 2;
+    } else {
+      // For normal pages in spread view, width is doubled while height stays the same
+      spreadViewWidthMultiplier = pages.length > 1 ? 2 : 1;
+      aspectRatio = singlePageAspectRatio / spreadViewWidthMultiplier;
+    }
     
     // Calculate width and height based on available space and aspect ratio
     let width, height;
     
-    if (maxHeight / maxWidth > aspectRatio) {
-      // Width is the limiting factor
-      width = maxWidth;
-      height = width * aspectRatio;
-    } else {
-      // Height is the limiting factor
+    // For the double-page spread (page 11-12), prioritize maintaining the height
+    if (pages.length === 1 && pages[0] === 10) {
+      // Use max height as the limiting factor for double-page spread
       height = maxHeight;
       width = height / aspectRatio;
+      
+      // If width exceeds maximum, adjust both
+      if (width > maxWidth) {
+        const scaleFactor = maxWidth / width;
+        width = maxWidth;
+        height = height * scaleFactor;
+      }
+    } else {
+      // Normal calculation for regular pages
+      if (maxHeight / maxWidth > aspectRatio) {
+        // Width is the limiting factor
+        width = maxWidth;
+        height = width * aspectRatio;
+      } else {
+        // Height is the limiting factor
+        height = maxHeight;
+        width = height / aspectRatio;
+      }
     }
     
     setDimensions({ width, height });
@@ -237,7 +277,7 @@ const ComicReader = () => {
   }, [isFullscreen, isSpreadView, currentPage]); // Recalculate when relevant states change
 
   const goToNextPage = () => {
-    if (currentPage < totalPages - 1) {
+    if (currentPage < totalPageFiles - 1) {
       if (isSpreadView && currentPage > 0) {
         // In spread view, advance by 2 pages (except when on cover page)
         // Special handling for the combined page
@@ -247,7 +287,7 @@ const ComicReader = () => {
           setCurrentPage(12); // Skip to page 13 (index 12) after the combined spread
         } else {
           // Normal case: advance by 2 pages
-          const nextPage = Math.min(currentPage + 2, totalPages - 1);
+          const nextPage = Math.min(currentPage + 2, totalPageFiles - 1);
           setCurrentPage(nextPage);
         }
       } else {
@@ -307,7 +347,7 @@ const ComicReader = () => {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [currentPage, isFullscreen, isSpreadView, totalPages]);
+  }, [currentPage, isFullscreen, isSpreadView, totalPageFiles]);
 
   // Get pages to display
   const pagesToShow = getCurrentPages();
@@ -324,8 +364,14 @@ const ComicReader = () => {
           <div className="flex items-center gap-4">
             <div className="font-title text-white">
               {isSpreadView && pagesToShow.length > 1 
-                ? `Pages ${pagesToShow[0] + 1}-${pagesToShow[1] + 1} of ${totalPages}` 
-                : `Page ${currentPage + 1} of ${totalPages}`
+                ? `Pages ${pagesToShow[0] === 10 ? '11-12' : 
+                       pagesToShow[0] > 10 ? pagesToShow[0] + 2 : pagesToShow[0] + 1}-${
+                       pagesToShow[1] === 10 ? '11-12' : 
+                       pagesToShow[1] > 10 ? pagesToShow[1] + 2 : pagesToShow[1] + 1
+                     } of ${actualPageCount}` 
+                : currentPage === 10
+                  ? `Pages 11-12 of ${actualPageCount}`
+                  : `Page ${currentPage > 10 ? currentPage + 2 : currentPage + 1} of ${actualPageCount}`
               }
             </div>
             
@@ -384,28 +430,33 @@ const ComicReader = () => {
             </div>
             
             {/* Render pages based on current view mode */}
-            {pagesToShow.map((pageIndex, i) => (
-              <div 
-                key={`page-${pageIndex}`}
-                className="relative h-full"
-                style={{
-                  width: pagesToShow.length > 1 || pageIndex === 10 ? 
-                         (pageIndex === 10 ? '100%' : '50%') : '100%'
-                }}
-              >
-                <Image
-                  src={COMIC_PAGES[pageIndex].src}
-                  alt={COMIC_PAGES[pageIndex].alt}
-                  fill
-                  className="object-contain"
-                  priority={i === 0}
-                  sizes={pagesToShow.length > 1 ? "50vw" : "100vw"}
-                  quality={80} // Balance between quality and performance
-                  onLoad={() => setIsLoading(false)}
-                  unoptimized // Use this for external images from Vercel storage
-                />
-              </div>
-            ))}
+            {pagesToShow.map((pageIndex, i) => {
+              // Check if this is the double-page spread
+              const isDoublePage = pageIndex === 10;
+              
+              return (
+                <div 
+                  key={`page-${pageIndex}`}
+                  className="relative h-full"
+                  style={{
+                    width: pagesToShow.length > 1 || isDoublePage ? 
+                           (isDoublePage ? '100%' : '50%') : '100%'
+                  }}
+                >
+                  <Image
+                    src={COMIC_PAGES[pageIndex].src}
+                    alt={COMIC_PAGES[pageIndex].alt}
+                    fill
+                    className={`object-contain ${isDoublePage ? 'object-fit-contain' : ''}`}
+                    priority={i === 0}
+                    sizes={pagesToShow.length > 1 || isDoublePage ? (isDoublePage ? "100vw" : "50vw") : "100vw"}
+                    quality={80} // Balance between quality and performance
+                    onLoad={() => setIsLoading(false)}
+                    unoptimized // Use this for external images from Vercel storage
+                  />
+                </div>
+              );
+            })}
             
             {/* Navigation Controls */}
             <div className="absolute inset-0 flex items-center justify-between px-4 z-10">
@@ -426,9 +477,9 @@ const ComicReader = () => {
               {/* Next Button */}
               <button
                 onClick={goToNextPage}
-                disabled={currentPage === totalPages - 1 || (isSpreadView && pagesToShow.length > 1 && pagesToShow[pagesToShow.length - 1] === totalPages - 1)}
+                disabled={currentPage === totalPageFiles - 1 || (isSpreadView && pagesToShow.length > 1 && pagesToShow[pagesToShow.length - 1] === totalPageFiles - 1)}
                 className={`p-3 rounded-full bg-darker/80 text-white ${
-                  (currentPage === totalPages - 1 || (isSpreadView && pagesToShow.length > 1 && pagesToShow[pagesToShow.length - 1] === totalPages - 1)) ? 'opacity-50 cursor-not-allowed' : 'hover:bg-primary/80'
+                  (currentPage === totalPageFiles - 1 || (isSpreadView && pagesToShow.length > 1 && pagesToShow[pagesToShow.length - 1] === totalPageFiles - 1)) ? 'opacity-50 cursor-not-allowed' : 'hover:bg-primary/80'
                 }`}
                 aria-label="Next page"
               >
@@ -469,23 +520,23 @@ const ComicReader = () => {
                 const shouldRender = visiblePages.includes(index) || 
                                      Math.abs(index - currentPage) < 3 || 
                                      index === 0 || 
-                                     index === totalPages - 1;
+                                     index === totalPageFiles - 1;
                 
                 return (
                   <button
                     key={index}
                     onClick={() => setCurrentPage(index)}
-                    className={`relative h-16 w-12 border-2 transition-all ${
+                    className={`relative h-16 transition-all ${
                       isActive ? 'border-primary scale-110' : 'border-gray-700 opacity-70'
-                    }`}
+                    } ${index === 10 ? 'w-24 border-2' : 'w-12 border-2'}`}
                   >
                     {shouldRender ? (
                       <Image
                         src={page.src}
                         alt={`Thumbnail ${index + 1}`}
                         fill
-                        className="object-cover"
-                        sizes="48px"
+                        className={index === 10 ? "object-contain" : "object-cover"}
+                        sizes={index === 10 ? "96px" : "48px"}
                         quality={10} // Low quality is fine for thumbnails
                         unoptimized // Use this for external images from Vercel storage
                       />
@@ -493,7 +544,7 @@ const ComicReader = () => {
                       <div className="absolute inset-0 bg-darker flex items-center justify-center"></div>
                     )}
                     <div className="absolute inset-0 flex items-center justify-center bg-black/50 text-white font-bold">
-                      {index + 1}
+                      {index === 10 ? '11-12' : index > 10 ? `${index + 2}` : `${index + 1}`}
                     </div>
                   </button>
                 );
