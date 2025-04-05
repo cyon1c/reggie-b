@@ -25,39 +25,47 @@ export default function CharactersPage() {
         </div>
       </section>
 
-      {/* Main Character */}
+      {/* Reggie Bloodletter */}
       <section className="py-20 bg-darker">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div>
               <h2 className="text-4xl md:text-5xl font-display mb-6 text-white">
-                <span className="text-primary">BLOODLETTER</span>
+                Reggie <span className="text-primary">Bloodletter</span>
               </h2>
               <p className="text-xl text-white mb-6">
-                A cybernetically enhanced guide navigating the treacherous streets of Neo Fortuna. 
-                Armed with advanced technology and a thirst for justice, Bloodletter serves as both 
-                protector and avenger in a city where the line between right and wrong is as blurred 
-                as the neon-lit streets.
+                A former soldier and mercenary, Reggie Bloodletter, is the enigmatic driving force behind the main story. 
+                Who he is and why New Libertalia is his last chance for a new life are currently a mystery.
               </p>
-              <div className="space-y-4">
+              <p className="text-xl text-white mb-6">
+                What is known, is that he was a former member of the infamous Wolfhound unit that gained legendary status 
+                during the first galactic war and that he is responsible for the death of New Libertalia's most difficult 
+                bounty, known as Kuku-Kana "The Curator."
+              </p>
+              <p className="text-xl text-white mb-6">
+                Alongside his partner Glitch, who is responsible for the intelligence and logistical side of the operation, 
+                Reggie has access to an invisible spaceship, a variety of grenade types, holographic projectors, and jet boots. 
+                All of which he utilizes with blazing efficiency to track and dispatch his foes.
+              </p>
+              <div className="space-y-4 mt-8">
                 <div className="flex items-center gap-4">
                   <div className="w-2 h-2 bg-primary rounded-full"></div>
-                  <p className="text-white">Cybernetic enhancements for enhanced combat capabilities</p>
+                  <p className="text-white">Former Wolfhound unit member</p>
                 </div>
                 <div className="flex items-center gap-4">
                   <div className="w-2 h-2 bg-primary rounded-full"></div>
-                  <p className="text-white">Expert knowledge of Neo Fortuna's underground networks</p>
+                  <p className="text-white">Expert in advanced weaponry and combat tactics</p>
                 </div>
                 <div className="flex items-center gap-4">
                   <div className="w-2 h-2 bg-primary rounded-full"></div>
-                  <p className="text-white">Haunted by past decisions and seeking redemption</p>
+                  <p className="text-white">Seeking a new life in New Libertalia</p>
                 </div>
               </div>
             </div>
             <div className="relative aspect-square rounded-lg overflow-hidden neon-border">
               <Image 
                 src="/images/reggie.jpg" 
-                alt="Bloodletter character" 
+                alt="Reggie Bloodletter character" 
                 fill 
                 className="object-cover"
               />
@@ -66,122 +74,122 @@ export default function CharactersPage() {
         </div>
       </section>
 
-      {/* Supporting Characters */}
+      {/* Glitch */}
       <section className="py-20 bg-dark">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-4xl md:text-5xl font-display mb-12 text-white text-center">
-            Supporting <span className="text-primary">Cast</span>
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* The Wardens */}
-            <div className="cyberpunk-card">
-              <div className="aspect-square mb-6 relative overflow-hidden">
-                <Image 
-                  src="/images/commandant-warden.jpg" 
-                  alt="The Wardens" 
-                  fill 
-                  className="object-cover"
-                />
-              </div>
-              <h3 className="text-2xl text-primary font-display mb-2">THE WARDENS</h3>
-              <p className="text-xl text-white font-title">
-                "Corporate enforcers who maintain their grip on Neo Fortuna through technological dominance and fear."
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center md:flex-row-reverse">
+            <div className="md:order-2">
+              <h2 className="text-4xl md:text-5xl font-display mb-6 text-white">
+                <span className="text-primary">Glitch</span>
+              </h2>
+              <p className="text-xl text-white mb-6">
+                As the universe's first and only converted digital life form, Glitch currently resides in 
+                the Renegade's navigation and control systems. A digital ghost of her former self, Glitch 
+                helps Reggie gather and assess intelligence in any given moment while simultaneously piloting 
+                the Renegade when needed.
               </p>
-              <div className="mt-4 pt-4 border-t border-gray-700">
-                <p className="text-white">
-                  The ruling force of Neo Fortuna, using advanced technology and ruthless tactics 
-                  to maintain control over the city's population.
-                </p>
+              <p className="text-xl text-white mb-6">
+                Although she is still coming to terms with her lack of a physical body, her personality was 
+                somehow perfectly preserved and desperate for interpersonal connection.
+              </p>
+              <div className="space-y-4 mt-8">
+                <div className="flex items-center gap-4">
+                  <div className="w-2 h-2 bg-primary rounded-full"></div>
+                  <p className="text-white">Universe's first converted digital life form</p>
+                </div>
+                <div className="flex items-center gap-4">
+                  <div className="w-2 h-2 bg-primary rounded-full"></div>
+                  <p className="text-white">Controls the Renegade's navigation systems</p>
+                </div>
+                <div className="flex items-center gap-4">
+                  <div className="w-2 h-2 bg-primary rounded-full"></div>
+                  <p className="text-white">Maintains her personality despite digital existence</p>
+                </div>
               </div>
             </div>
-
-            {/* The Bounty Hunters */}
-            <div className="cyberpunk-card">
-              <div className="aspect-square mb-6 relative overflow-hidden">
-                <Image 
-                  src="/images/m4jor-warden.jpg" 
-                  alt="The Bounty Hunters" 
-                  fill 
-                  className="object-cover"
-                />
-              </div>
-              <h3 className="text-2xl text-primary font-display mb-2">THE BOUNTY HUNTERS</h3>
-              <p className="text-xl text-white font-title">
-                "Merciless trackers who hunt down targets for the highest bidder, answering to no faction but credits."
-              </p>
-              <div className="mt-4 pt-4 border-t border-gray-700">
-                <p className="text-white">
-                  Independent operators who will track down any target for the right price, 
-                  making them both potential allies and dangerous adversaries.
-                </p>
-              </div>
-            </div>
-
-            {/* The Resistance */}
-            <div className="cyberpunk-card">
-              <div className="aspect-square mb-6 relative overflow-hidden">
-                <Image 
-                  src="/images/herald-of-the-cult-of-the-pineapple-god-bounty.jpg" 
-                  alt="The Resistance" 
-                  fill 
-                  className="object-cover"
-                />
-              </div>
-              <h3 className="text-2xl text-primary font-display mb-2">THE RESISTANCE</h3>
-              <p className="text-xl text-white font-title">
-                "Underground fighters struggling to restore balance and justice to the ungovernable world of Neo Fortuna."
-              </p>
-              <div className="mt-4 pt-4 border-t border-gray-700">
-                <p className="text-white">
-                  A network of rebels and freedom fighters working to overthrow the Wardens' 
-                  oppressive regime and restore justice to Neo Fortuna.
-                </p>
+            <div className="relative aspect-square rounded-lg overflow-hidden neon-border md:order-1">
+              <div className="w-full h-full bg-blue-900/30 flex items-center justify-center">
+                <div className="p-10 w-full h-full relative">
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-full h-full flex flex-col items-center justify-center gap-2">
+                      <div className="text-primary text-7xl font-bold glitch-effect">GLITCH</div>
+                      <div className="border-2 border-primary w-3/4 h-64 relative overflow-hidden rounded">
+                        <div className="absolute inset-0 bg-gradient-to-b from-primary/20 to-transparent animate-pulse"></div>
+                        <div className="absolute inset-0 flex items-center justify-center text-primary/70 text-sm font-mono">
+                          DIGITAL ENTITY FORMAT <br/>
+                          AWAITING VISUALIZATION
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Character Relationships */}
+      {/* Kuku-Kana "The Curator" */}
       <section className="py-20 bg-darker">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-4xl md:text-5xl font-display mb-12 text-white text-center">
-            Character <span className="text-primary">Relationships</span>
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="cyberpunk-card">
-              <h3 className="text-2xl text-primary font-display mb-4">Allies</h3>
-              <ul className="space-y-4">
-                <li className="flex items-center gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <div>
+              <h2 className="text-4xl md:text-5xl font-display mb-6 text-white">
+                Kuku-Kana <span className="text-primary">"The Curator"</span>
+              </h2>
+              <p className="text-xl text-white mb-6">
+                Sporting a legacy of pain spanning several decades, the Curator is a mad scientist akin 
+                to no other the galaxy has ever seen before. Having spent his entire life experimenting 
+                on his unwilling subjects of all ages, genders, and species, he has cultivated a vast 
+                catalog of medical breakthroughs and technological wonders.
+              </p>
+              <p className="text-xl text-white mb-6">
+                Using his vast wealth of knowledge and resources to fund his every perversion, the Curator, 
+                as both Reggie and Glitch refer to him, has developed something he calls his magnum opus. 
+                A substance that allows him to manipulate the genetic information of anyone into anything 
+                he so chooses.
+              </p>
+              <p className="text-xl text-white mb-6">
+                The Curator's intelligence and vast expertise is matched by his physical strength and size. 
+                Sporting a powerful metal chassis loaded with hundreds of scientific implements, The Curator 
+                is not to be taken lightly in a fight and poses a serious threat to anyone of any level of skill. 
+                That was, of course, before he fell 20,000 feet.
+              </p>
+              <div className="space-y-4 mt-8">
+                <div className="flex items-center gap-4">
                   <div className="w-2 h-2 bg-primary rounded-full"></div>
-                  <p className="text-white">The Resistance - Providing intel and support</p>
-                </li>
-                <li className="flex items-center gap-4">
+                  <p className="text-white">Mad scientist with decades of unethical experiments</p>
+                </div>
+                <div className="flex items-center gap-4">
                   <div className="w-2 h-2 bg-primary rounded-full"></div>
-                  <p className="text-white">Underground Network - Safe houses and resources</p>
-                </li>
-                <li className="flex items-center gap-4">
+                  <p className="text-white">Creator of genetic manipulation substance</p>
+                </div>
+                <div className="flex items-center gap-4">
                   <div className="w-2 h-2 bg-primary rounded-full"></div>
-                  <p className="text-white">Tech Specialists - Maintaining cybernetic enhancements</p>
-                </li>
-              </ul>
+                  <p className="text-white">Enhanced with powerful metal chassis and scientific implements</p>
+                </div>
+              </div>
             </div>
-            <div className="cyberpunk-card">
-              <h3 className="text-2xl text-primary font-display mb-4">Adversaries</h3>
-              <ul className="space-y-4">
-                <li className="flex items-center gap-4">
-                  <div className="w-2 h-2 bg-primary rounded-full"></div>
-                  <p className="text-white">The Wardens - Primary antagonists</p>
-                </li>
-                <li className="flex items-center gap-4">
-                  <div className="w-2 h-2 bg-primary rounded-full"></div>
-                  <p className="text-white">Bounty Hunters - Pursuing for rewards</p>
-                </li>
-                <li className="flex items-center gap-4">
-                  <div className="w-2 h-2 bg-primary rounded-full"></div>
-                  <p className="text-white">Corporate Enforcers - Protecting interests</p>
-                </li>
-              </ul>
+            <div className="relative aspect-square rounded-lg overflow-hidden neon-border">
+              <div className="w-full h-full bg-red-900/30 flex items-center justify-center">
+                <div className="p-6 w-full h-full relative">
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-full h-full flex flex-col items-center justify-center gap-4">
+                      <div className="text-red-500 text-6xl font-bold mb-4">THE CURATOR</div>
+                      <div className="border-2 border-red-500 w-3/4 h-3/5 relative overflow-hidden rounded-lg">
+                        <div className="absolute inset-0 bg-gradient-to-b from-red-500/20 to-transparent"></div>
+                        <div className="absolute inset-0 flex items-center justify-center text-red-500/70 text-sm font-mono">
+                          CLASSIFIED SUBJECT FILE <br/>
+                          BIOHAZARD LEVEL: EXTREME
+                        </div>
+                      </div>
+                      <div className="text-red-500/80 text-lg font-mono mt-2">
+                        STATUS: TERMINATED - FALL FROM 20,000 FT
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -202,8 +210,8 @@ export default function CharactersPage() {
             Discover Their <span className="text-primary">Stories</span>
           </h2>
           <p className="text-xl text-white mb-12">
-            Dive deeper into the world of Neo Fortuna and follow these characters' 
-            journeys through the pages of BLOODLETTER.
+            Dive deeper into the world of Bloodletter and follow these characters' 
+            journeys through an epic tale of revenge, redemption, and discovery.
           </p>
           <a href="/comics" className="neon-button text-xl py-4 px-10">
             Read Issue One

@@ -32,10 +32,20 @@ export default function Home() {
               <span>BLOODLETTER</span>
             </div>
           </h1>
-          <p className="text-3xl md:text-5xl font-title text-primary mb-12 max-w-3xl mx-auto">
-            fight the system, follow the story
+          <p className="text-2xl md:text-3xl font-title text-white mb-12 max-w-3xl mx-auto leading-relaxed">
+            Invisible spaceships, psychopath alien mercenaries, corrupt genocidal politicians, and giant, evil space snakes. What else is new when you're the intergalactic bounty hunter known as-
           </p>
-          <div className="mt-16">
+          <div className="mx-auto w-full max-w-md mb-12">
+            <Image 
+              src="/images/bloodletter-logo.png" 
+              alt="BLOODLETTER" 
+              width={500} 
+              height={100}
+              className="w-full h-auto"
+              priority
+            />
+          </div>
+          <div className="mt-8">
             <Link href="/comics" className="neon-button text-xl py-4 px-10">
               Read the First Issue Free
             </Link>
