@@ -26,13 +26,7 @@ export default function Home() {
         </div>
         
         <div className="relative z-20 text-center max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="huge-text mb-6">
-            <div className="stacked-text">
-              <span>BLOODLETTER</span>
-              <span>BLOODLETTER</span>
-            </div>
-          </h1>
-          <p className="text-2xl md:text-3xl font-title text-white mb-12 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-2xl md:text-3xl font-title text-white mb-12 max-w-3xl mx-auto leading-relaxed pt-16">
             Invisible spaceships, psychopath alien mercenaries, corrupt genocidal politicians, and giant, evil space snakes. What else is new when you're the intergalactic bounty hunter known as-
           </p>
           <div className="mx-auto w-full max-w-md mb-12">
