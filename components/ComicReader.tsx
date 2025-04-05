@@ -364,10 +364,14 @@ const ComicReader = () => {
           <div className="flex items-center gap-4">
             <div className="font-title text-white">
               {isSpreadView && pagesToShow.length > 1 
-                ? `Pages ${pagesToShow[0] + 1}-${pagesToShow[1] + 1} of ${actualPageCount}` 
+                ? `Pages ${pagesToShow[0] === 10 ? '11-12' : 
+                       pagesToShow[0] > 10 ? pagesToShow[0] + 2 : pagesToShow[0] + 1}-${
+                       pagesToShow[1] === 10 ? '11-12' : 
+                       pagesToShow[1] > 10 ? pagesToShow[1] + 2 : pagesToShow[1] + 1
+                     } of ${actualPageCount}` 
                 : currentPage === 10
                   ? `Pages 11-12 of ${actualPageCount}`
-                  : `Page ${currentPage + 1} of ${actualPageCount}`
+                  : `Page ${currentPage > 10 ? currentPage + 2 : currentPage + 1} of ${actualPageCount}`
               }
             </div>
             
@@ -540,7 +544,7 @@ const ComicReader = () => {
                       <div className="absolute inset-0 bg-darker flex items-center justify-center"></div>
                     )}
                     <div className="absolute inset-0 flex items-center justify-center bg-black/50 text-white font-bold">
-                      {index === 10 ? '11-12' : index > 10 ? index + 2 : index + 1}
+                      {index === 10 ? 'P11-12' : index > 10 ? `P${index + 2}` : `P${index + 1}`}
                     </div>
                   </button>
                 );
