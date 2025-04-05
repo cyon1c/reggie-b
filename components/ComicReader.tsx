@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 
 // Define the comic pages - now using Vercel storage URLs
-const VERCEL_STORAGE_URL = 'https://first-comic.vercel-storage.com';
+const VERCEL_STORAGE_URL = 'https://reggie-b.vercel.blob.core.windows.net';
 
 const COMIC_PAGES = [
   { src: `${VERCEL_STORAGE_URL}/issue-one/Page1.webp`, alt: 'Page 1' },
