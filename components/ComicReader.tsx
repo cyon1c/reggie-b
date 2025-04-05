@@ -5,43 +5,42 @@ import Image from 'next/image';
 
 // Define the comic pages - now using the high-quality issue-one pages
 const COMIC_PAGES = [
-  { src: '/images/issue-one/Page#1 - Final.png', alt: 'Page 1' },
-  { src: '/images/issue-one/Page#2 - Final.png', alt: 'Page 2' },
-  { src: '/images/issue-one/Page#3 - Final.png', alt: 'Page 3' },
-  { src: '/images/issue-one/Page#4 - Fixed.png', alt: 'Page 4' },
-  { src: '/images/issue-one/Page#5 - Final.png', alt: 'Page 5' },
-  { src: '/images/issue-one/Page#6 - Final.png', alt: 'Page 6' },
-  { src: '/images/issue-one/Page#7 - Final.png', alt: 'Page 7' },
-  { src: '/images/issue-one/Page#8 - Final.png', alt: 'Page 8' },
-  { src: '/images/issue-one/Page#9 - Final.png', alt: 'Page 9' },
-  { src: '/images/issue-one/Page#10-Final.png', alt: 'Page 10' },
-  { src: '/images/issue-one/Page#11-Final.png', alt: 'Page 11' },
-  { src: '/images/issue-one/Page#12 - Final.png', alt: 'Page 12' },
-  { src: '/images/issue-one/Page#13 - Final.png', alt: 'Page 13' },
-  { src: '/images/issue-one/Page#14 - Final.png', alt: 'Page 14' },
-  { src: '/images/issue-one/Page#15 - Final.png', alt: 'Page 15' },
-  { src: '/images/issue-one/Page#16 - Final.png', alt: 'Page 16' },
-  { src: '/images/issue-one/Page#17 - Final.png', alt: 'Page 17' },
-  { src: '/images/issue-one/Page#18 - FINAL.png', alt: 'Page 18' },
-  { src: '/images/issue-one/Page#19 - Final.png', alt: 'Page 19' },
-  // Missing page 20 in the folder, need to confirm if this is intentional
-  { src: '/images/issue-one/Page#21 - Final.png', alt: 'Page 21' },
-  { src: '/images/issue-one/Page#22 - FINAL.png', alt: 'Page 22' },
-  { src: '/images/issue-one/Page#23 - Final.png', alt: 'Page 23' },
-  { src: '/images/issue-one/Page#24 - FINAL.png', alt: 'Page 24' },
-  { src: '/images/issue-one/Page#25 - FINAL.png', alt: 'Page 25' },
-  { src: '/images/issue-one/Page#26 - Final.png', alt: 'Page 26' },
-  { src: '/images/issue-one/Page#27 - FINAL.png', alt: 'Page 27' },
-  { src: '/images/issue-one/Page#28 - FINAL.png', alt: 'Page 28' },
-  { src: '/images/issue-one/Page#29 - Final.png', alt: 'Page 29' },
-  { src: '/images/issue-one/Page#30 - Final.png', alt: 'Page 30' },
-  { src: '/images/issue-one/Page#31 - FINAL.png', alt: 'Page 31' },
-  { src: '/images/issue-one/Page#32 - Final.png', alt: 'Page 32' },
-  { src: '/images/issue-one/Page#33 - FINAL.png', alt: 'Page 33' },
-  { src: '/images/issue-one/Page#34 - FINAL.png', alt: 'Page 34' },
-  { src: '/images/issue-one/Page#35 - FINAL.png', alt: 'Page 35' },
-  { src: '/images/issue-one/Page#36 - FINAL.png', alt: 'Page 36' },
-  { src: '/images/issue-one/Page#37 - FINAL.png', alt: 'Page 37' },
+  { src: '/images/issue-one/Page#1.webp', alt: 'Page 1' },
+  { src: '/images/issue-one/Page#2.webp', alt: 'Page 2' },
+  { src: '/images/issue-one/Page#3.webp', alt: 'Page 3' },
+  { src: '/images/issue-one/Page#4.webp', alt: 'Page 4' },
+  { src: '/images/issue-one/Page#5.webp', alt: 'Page 5' },
+  { src: '/images/issue-one/Page#6.webp', alt: 'Page 6' },
+  { src: '/images/issue-one/Page#7.webp', alt: 'Page 7' },
+  { src: '/images/issue-one/Page#8.webp', alt: 'Page 8' },
+  { src: '/images/issue-one/Page#9.webp', alt: 'Page 9' },
+  { src: '/images/issue-one/Page#10.webp', alt: 'Page 10' },
+  { src: '/images/issue-one/Page#11-#12.webp', alt: 'Pages 11-12' },
+  { src: '/images/issue-one/Page#13.webp', alt: 'Page 13' },
+  { src: '/images/issue-one/Page#14.webp', alt: 'Page 14' },
+  { src: '/images/issue-one/Page#15.webp', alt: 'Page 15' },
+  { src: '/images/issue-one/Page#16.webp', alt: 'Page 16' },
+  { src: '/images/issue-one/Page#17.webp', alt: 'Page 17' },
+  { src: '/images/issue-one/Page#18.webp', alt: 'Page 18' },
+  { src: '/images/issue-one/Page#19.webp', alt: 'Page 19' },
+  { src: '/images/issue-one/Page#20.webp', alt: 'Page 20' },
+  { src: '/images/issue-one/Page#21.webp', alt: 'Page 21' },
+  { src: '/images/issue-one/Page#22.webp', alt: 'Page 22' },
+  { src: '/images/issue-one/Page#23.webp', alt: 'Page 23' },
+  { src: '/images/issue-one/Page#24.webp', alt: 'Page 24' },
+  { src: '/images/issue-one/Page#25.webp', alt: 'Page 25' },
+  { src: '/images/issue-one/Page#26.webp', alt: 'Page 26' },
+  { src: '/images/issue-one/Page#27.webp', alt: 'Page 27' },
+  { src: '/images/issue-one/Page#28.webp', alt: 'Page 28' },
+  { src: '/images/issue-one/Page#29.webp', alt: 'Page 29' },
+  { src: '/images/issue-one/Page#30.webp', alt: 'Page 30' },
+  { src: '/images/issue-one/Page#31.webp', alt: 'Page 31' },
+  { src: '/images/issue-one/Page#32.webp', alt: 'Page 32' },
+  { src: '/images/issue-one/Page#33.webp', alt: 'Page 33' },
+  { src: '/images/issue-one/Page#34.webp', alt: 'Page 34' },
+  { src: '/images/issue-one/Page#35.webp', alt: 'Page 35' },
+  { src: '/images/issue-one/Page#36.webp', alt: 'Page 36' },
+  { src: '/images/issue-one/Page#37.webp', alt: 'Page 37' },
 ];
 
 const ComicReader = () => {
@@ -57,6 +56,11 @@ const ComicReader = () => {
 
   // Get current displayed pages based on view mode
   const getCurrentPages = () => {
+    // Special case for combined pages
+    if (currentPage === 10) { // Index 10 is the combined Page#11-#12.webp
+      return [10]; // Return just this page as it's already a spread
+    }
+    
     // In single page view, just return the current page
     if (!isSpreadView) {
       return [currentPage];
@@ -73,11 +77,19 @@ const ComicReader = () => {
     const isEvenPage = (currentPage % 2) === 0;
     if (isEvenPage) {
       // Show current and next page, but don't exceed totalPages
+      // Skip creating a spread with the combined page (index 10)
+      if (currentPage + 1 === 10) {
+        return [currentPage];
+      }
       return currentPage + 1 < totalPages 
         ? [currentPage, currentPage + 1] 
         : [currentPage];
     } else {
       // Show previous and current page
+      // Skip creating a spread with the combined page (index 10)
+      if (currentPage - 1 === 10) {
+        return [currentPage];
+      }
       return [currentPage - 1, currentPage];
     }
   };
@@ -226,11 +238,24 @@ const ComicReader = () => {
     if (currentPage < totalPages - 1) {
       if (isSpreadView && currentPage > 0) {
         // In spread view, advance by 2 pages (except when on cover page)
-        const nextPage = Math.min(currentPage + 2, totalPages - 1);
-        setCurrentPage(nextPage);
+        // Special handling for the combined page
+        if (currentPage === 9) { // Before the combined page
+          setCurrentPage(10); // Go directly to the combined page
+        } else if (currentPage === 10) { // After the combined page
+          setCurrentPage(12); // Skip to page 13 (index 12) after the combined spread
+        } else {
+          // Normal case: advance by 2 pages
+          const nextPage = Math.min(currentPage + 2, totalPages - 1);
+          setCurrentPage(nextPage);
+        }
       } else {
         // In single page view or when on cover, advance by 1
-        setCurrentPage(currentPage + 1);
+        // Special handling for the combined page - skip page 11 (it's part of 11-12)
+        if (currentPage === 10) { // After the combined page
+          setCurrentPage(12); // Go to page 13 (index 12)
+        } else {
+          setCurrentPage(currentPage + 1);
+        }
       }
     }
   };
@@ -238,12 +263,24 @@ const ComicReader = () => {
   const goToPrevPage = () => {
     if (currentPage > 0) {
       if (isSpreadView && currentPage > 2) {
-        // In spread view, go back by 2 pages
-        // But stop at page 1 (to keep page 0 as standalone cover)
-        setCurrentPage(Math.max(1, currentPage - 2));
+        // Special handling for the combined page
+        if (currentPage === 12) { // After the combined page
+          setCurrentPage(10); // Go back to the combined page
+        } else if (currentPage === 10) { // On the combined page
+          setCurrentPage(8); // Go back to page 9 (index 8)
+        } else {
+          // In spread view, go back by 2 pages
+          // But stop at page 1 (to keep page 0 as standalone cover)
+          setCurrentPage(Math.max(1, currentPage - 2));
+        }
       } else {
-        // In single page view or when near cover, go back by 1
-        setCurrentPage(currentPage - 1);
+        // Special handling for the combined page
+        if (currentPage === 12) { // After the combined page
+          setCurrentPage(10); // Go back to the combined page
+        } else {
+          // In single page view or when near cover, go back by 1
+          setCurrentPage(currentPage - 1);
+        }
       }
     }
   };
@@ -350,7 +387,8 @@ const ComicReader = () => {
                 key={`page-${pageIndex}`}
                 className="relative h-full"
                 style={{
-                  width: pagesToShow.length > 1 ? '50%' : '100%'
+                  width: pagesToShow.length > 1 || pageIndex === 10 ? 
+                         (pageIndex === 10 ? '100%' : '50%') : '100%'
                 }}
               >
                 <Image
