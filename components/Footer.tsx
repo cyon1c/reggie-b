@@ -61,7 +61,7 @@ export default function Footer() {
             <h3 className="font-display text-2xl text-white mb-8 tracking-wide uppercase">Secure Channels</h3>
             <ul className="space-y-4">
               <li>
-                <a href="https://discord.gg" target="_blank" rel="noopener noreferrer" className="block text-xl text-gray hover:text-primary transition-colors font-display tracking-wide">
+                <a href="https://discord.gg/sN6UJQC7NG" target="_blank" rel="noopener noreferrer" className="block text-xl text-gray hover:text-primary transition-colors font-display tracking-wide">
                   Discord
                 </a>
               </li>
