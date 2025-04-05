@@ -29,12 +29,12 @@ export default function Home() {
           <p className="text-2xl md:text-3xl font-title text-white mb-12 max-w-3xl mx-auto leading-relaxed pt-16">
             Invisible spaceships, psychopath alien mercenaries, corrupt genocidal politicians, and giant, evil space snakes. What else is new when you're the intergalactic bounty hunter known as-
           </p>
-          <div className="mx-auto w-full max-w-md mb-12">
+          <div className="mx-auto w-full max-w-2xl mb-12">
             <Image 
               src="/images/bloodletter-logo.png" 
               alt="BLOODLETTER" 
-              width={500} 
-              height={100}
+              width={800} 
+              height={160}
               className="w-full h-auto"
               priority
             />
