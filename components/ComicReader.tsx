@@ -144,22 +144,54 @@ const ComicReader = () => {
     // Measured from the actual PNG dimensions which are typically ~2560x3600px
     const singlePageAspectRatio = 1.4;
     
-    // For spread view, the width is doubled while height stays the same
-    // This creates a landscape-oriented container for two pages side by side
-    const spreadViewWidthMultiplier = getCurrentPages().length > 1 ? 2 : 1;
-    const aspectRatio = singlePageAspectRatio / spreadViewWidthMultiplier;
+    // Get the current pages to display
+    const pages = getCurrentPages();
+    
+    // Special handling for the double-page spread (Page11-12.webp at index 10)
+    // Double-page spreads have an aspect ratio that's half of a single page
+    // A single page is taller than wide (1.4:1), a double spread is wider than tall (0.7:1)
+    let spreadViewWidthMultiplier;
+    let aspectRatio;
+    
+    if (pages.length === 1 && pages[0] === 10) {
+      // For the double-page spread, we use a specific aspect ratio
+      // Double-page has approximately half the height:width ratio of a single page
+      aspectRatio = singlePageAspectRatio / 2;
+      // We'll use the height as the limiting factor for the double-page spread
+      // Set a wider multiplier for the container
+      spreadViewWidthMultiplier = 2;
+    } else {
+      // For normal pages in spread view, width is doubled while height stays the same
+      spreadViewWidthMultiplier = pages.length > 1 ? 2 : 1;
+      aspectRatio = singlePageAspectRatio / spreadViewWidthMultiplier;
+    }
     
     // Calculate width and height based on available space and aspect ratio
     let width, height;
     
-    if (maxHeight / maxWidth > aspectRatio) {
-      // Width is the limiting factor
-      width = maxWidth;
-      height = width * aspectRatio;
-    } else {
-      // Height is the limiting factor
+    // For the double-page spread (page 11-12), prioritize maintaining the height
+    if (pages.length === 1 && pages[0] === 10) {
+      // Use max height as the limiting factor for double-page spread
       height = maxHeight;
       width = height / aspectRatio;
+      
+      // If width exceeds maximum, adjust both
+      if (width > maxWidth) {
+        const scaleFactor = maxWidth / width;
+        width = maxWidth;
+        height = height * scaleFactor;
+      }
+    } else {
+      // Normal calculation for regular pages
+      if (maxHeight / maxWidth > aspectRatio) {
+        // Width is the limiting factor
+        width = maxWidth;
+        height = width * aspectRatio;
+      } else {
+        // Height is the limiting factor
+        height = maxHeight;
+        width = height / aspectRatio;
+      }
     }
     
     setDimensions({ width, height });
@@ -384,28 +416,33 @@ const ComicReader = () => {
             </div>
             
             {/* Render pages based on current view mode */}
-            {pagesToShow.map((pageIndex, i) => (
-              <div 
-                key={`page-${pageIndex}`}
-                className="relative h-full"
-                style={{
-                  width: pagesToShow.length > 1 || pageIndex === 10 ? 
-                         (pageIndex === 10 ? '100%' : '50%') : '100%'
-                }}
-              >
-                <Image
-                  src={COMIC_PAGES[pageIndex].src}
-                  alt={COMIC_PAGES[pageIndex].alt}
-                  fill
-                  className="object-contain"
-                  priority={i === 0}
-                  sizes={pagesToShow.length > 1 ? "50vw" : "100vw"}
-                  quality={80} // Balance between quality and performance
-                  onLoad={() => setIsLoading(false)}
-                  unoptimized // Use this for external images from Vercel storage
-                />
-              </div>
-            ))}
+            {pagesToShow.map((pageIndex, i) => {
+              // Check if this is the double-page spread
+              const isDoublePage = pageIndex === 10;
+              
+              return (
+                <div 
+                  key={`page-${pageIndex}`}
+                  className="relative h-full"
+                  style={{
+                    width: pagesToShow.length > 1 || isDoublePage ? 
+                           (isDoublePage ? '100%' : '50%') : '100%'
+                  }}
+                >
+                  <Image
+                    src={COMIC_PAGES[pageIndex].src}
+                    alt={COMIC_PAGES[pageIndex].alt}
+                    fill
+                    className={`object-contain ${isDoublePage ? 'object-fit-contain' : ''}`}
+                    priority={i === 0}
+                    sizes={pagesToShow.length > 1 || isDoublePage ? (isDoublePage ? "100vw" : "50vw") : "100vw"}
+                    quality={80} // Balance between quality and performance
+                    onLoad={() => setIsLoading(false)}
+                    unoptimized // Use this for external images from Vercel storage
+                  />
+                </div>
+              );
+            })}
             
             {/* Navigation Controls */}
             <div className="absolute inset-0 flex items-center justify-between px-4 z-10">
