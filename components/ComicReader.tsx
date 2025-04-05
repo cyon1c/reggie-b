@@ -60,9 +60,9 @@ const ComicReader = () => {
   const [visiblePages, setVisiblePages] = useState<number[]>([]);
   const containerRef = useRef<HTMLDivElement>(null);
   const readerRef = useRef<HTMLDivElement>(null);
-  const totalPages = COMIC_PAGES.length;
-  // The actual page count is one more than the array length because Page11-12.webp counts as two pages
-  const actualPageCount = totalPages + 1; // 44 pages (43 files with one double-page spread)
+  const totalPageFiles = COMIC_PAGES.length;
+  // The actual page count is 44 (43 files + 1 extra from the double-page spread)
+  const actualPageCount = 44;
 
   // Get current displayed pages based on view mode
   const getCurrentPages = () => {
@@ -91,7 +91,7 @@ const ComicReader = () => {
       if (currentPage + 1 === 10) {
         return [currentPage];
       }
-      return currentPage + 1 < totalPages 
+      return currentPage + 1 < totalPageFiles 
         ? [currentPage, currentPage + 1] 
         : [currentPage];
     } else {
@@ -113,7 +113,7 @@ const ComicReader = () => {
     if (currentPage > 0) {
       pagesToPreload.add(currentPage - 1);
     }
-    if (currentPage < totalPages - 1) {
+    if (currentPage < totalPageFiles - 1) {
       pagesToPreload.add(currentPage + 1);
     }
     
@@ -122,13 +122,13 @@ const ComicReader = () => {
       if (currentPage > 1) {
         pagesToPreload.add(currentPage - 2);
       }
-      if (currentPage < totalPages - 2) {
+      if (currentPage < totalPageFiles - 2) {
         pagesToPreload.add(currentPage + 2);
       }
     }
     
     setVisiblePages(Array.from(pagesToPreload));
-  }, [currentPage, isSpreadView, totalPages]);
+  }, [currentPage, isSpreadView, totalPageFiles]);
 
   // Calculate optimal dimensions based on viewport and container
   const calculateDimensions = () => {
@@ -277,7 +277,7 @@ const ComicReader = () => {
   }, [isFullscreen, isSpreadView, currentPage]); // Recalculate when relevant states change
 
   const goToNextPage = () => {
-    if (currentPage < totalPages - 1) {
+    if (currentPage < totalPageFiles - 1) {
       if (isSpreadView && currentPage > 0) {
         // In spread view, advance by 2 pages (except when on cover page)
         // Special handling for the combined page
@@ -287,7 +287,7 @@ const ComicReader = () => {
           setCurrentPage(12); // Skip to page 13 (index 12) after the combined spread
         } else {
           // Normal case: advance by 2 pages
-          const nextPage = Math.min(currentPage + 2, totalPages - 1);
+          const nextPage = Math.min(currentPage + 2, totalPageFiles - 1);
           setCurrentPage(nextPage);
         }
       } else {
@@ -347,7 +347,7 @@ const ComicReader = () => {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [currentPage, isFullscreen, isSpreadView, totalPages]);
+  }, [currentPage, isFullscreen, isSpreadView, totalPageFiles]);
 
   // Get pages to display
   const pagesToShow = getCurrentPages();
@@ -473,9 +473,9 @@ const ComicReader = () => {
               {/* Next Button */}
               <button
                 onClick={goToNextPage}
-                disabled={currentPage === totalPages - 1 || (isSpreadView && pagesToShow.length > 1 && pagesToShow[pagesToShow.length - 1] === totalPages - 1)}
+                disabled={currentPage === totalPageFiles - 1 || (isSpreadView && pagesToShow.length > 1 && pagesToShow[pagesToShow.length - 1] === totalPageFiles - 1)}
                 className={`p-3 rounded-full bg-darker/80 text-white ${
-                  (currentPage === totalPages - 1 || (isSpreadView && pagesToShow.length > 1 && pagesToShow[pagesToShow.length - 1] === totalPages - 1)) ? 'opacity-50 cursor-not-allowed' : 'hover:bg-primary/80'
+                  (currentPage === totalPageFiles - 1 || (isSpreadView && pagesToShow.length > 1 && pagesToShow[pagesToShow.length - 1] === totalPageFiles - 1)) ? 'opacity-50 cursor-not-allowed' : 'hover:bg-primary/80'
                 }`}
                 aria-label="Next page"
               >
@@ -516,23 +516,23 @@ const ComicReader = () => {
                 const shouldRender = visiblePages.includes(index) || 
                                      Math.abs(index - currentPage) < 3 || 
                                      index === 0 || 
-                                     index === totalPages - 1;
+                                     index === totalPageFiles - 1;
                 
                 return (
                   <button
                     key={index}
                     onClick={() => setCurrentPage(index)}
-                    className={`relative h-16 w-12 border-2 transition-all ${
+                    className={`relative h-16 transition-all ${
                       isActive ? 'border-primary scale-110' : 'border-gray-700 opacity-70'
-                    }`}
+                    } ${index === 10 ? 'w-24 border-2' : 'w-12 border-2'}`}
                   >
                     {shouldRender ? (
                       <Image
                         src={page.src}
                         alt={`Thumbnail ${index + 1}`}
                         fill
-                        className="object-cover"
-                        sizes="48px"
+                        className={index === 10 ? "object-contain" : "object-cover"}
+                        sizes={index === 10 ? "96px" : "48px"}
                         quality={10} // Low quality is fine for thumbnails
                         unoptimized // Use this for external images from Vercel storage
                       />
@@ -540,7 +540,7 @@ const ComicReader = () => {
                       <div className="absolute inset-0 bg-darker flex items-center justify-center"></div>
                     )}
                     <div className="absolute inset-0 flex items-center justify-center bg-black/50 text-white font-bold">
-                      {index === 10 ? '11-12' : index + 1}
+                      {index === 10 ? '11-12' : index > 10 ? index + 2 : index + 1}
                     </div>
                   </button>
                 );
