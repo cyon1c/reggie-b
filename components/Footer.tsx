@@ -38,11 +38,12 @@ export default function Footer() {
           <div>
             <h3 className="font-display text-2xl text-white mb-8 tracking-wide uppercase">Citizen's Log</h3>
             <div className="w-full max-w-md">
-              <form className="flex flex-col gap-4">
+              <form className="flex flex-col gap-4" action="mailto:brenton.peplinski@yahoo.com?subject=Citizen%27s%20Log%20Subscription" method="post" encType="text/plain">
                 <input 
                   type="email" 
                   placeholder="Enter your contact frequency" 
                   className="w-full px-6 py-4 bg-gray/20 text-white border border-gray/30 rounded-none focus:outline-none focus:ring-2 focus:ring-primary text-lg"
+                  name="email"
                   required
                 />
                 <button 
@@ -65,7 +66,7 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <a href="mailto:brenton.peplinski@yahoo.com" className="block text-xl text-gray hover:text-primary transition-colors font-display tracking-wide">
+                <a href="mailto:brenton.peplinski@yahoo.com?subject=Secure%20Channel%20Contact" className="block text-xl text-gray hover:text-primary transition-colors font-display tracking-wide">
                   brenton.peplinski@yahoo.com
                 </a>
               </li>
