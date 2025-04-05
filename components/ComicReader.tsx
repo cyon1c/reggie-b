@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 
 // Define the comic pages - now using Vercel storage URLs
-const VERCEL_STORAGE_URL = 'https://xacnaqrj5ebpenry.public.blob.vercel-storage.com';
+const VERCEL_STORAGE_URL = 'https://first-comic.vercel-storage.com';
 
 const COMIC_PAGES = [
   { src: `${VERCEL_STORAGE_URL}/issue-one/Page1.webp`, alt: 'Page 1' },
@@ -43,6 +43,12 @@ const COMIC_PAGES = [
   { src: `${VERCEL_STORAGE_URL}/issue-one/Page35.webp`, alt: 'Page 35' },
   { src: `${VERCEL_STORAGE_URL}/issue-one/Page36.webp`, alt: 'Page 36' },
   { src: `${VERCEL_STORAGE_URL}/issue-one/Page37.webp`, alt: 'Page 37' },
+  { src: `${VERCEL_STORAGE_URL}/issue-one/Page38.webp`, alt: 'Page 38' },
+  { src: `${VERCEL_STORAGE_URL}/issue-one/Page39.webp`, alt: 'Page 39' },
+  { src: `${VERCEL_STORAGE_URL}/issue-one/Page40.webp`, alt: 'Page 40' },
+  { src: `${VERCEL_STORAGE_URL}/issue-one/Page41.webp`, alt: 'Page 41' },
+  { src: `${VERCEL_STORAGE_URL}/issue-one/Page42.webp`, alt: 'Page 42' },
+  { src: `${VERCEL_STORAGE_URL}/issue-one/Page43.webp`, alt: 'Page 43' },
 ];
 
 const ComicReader = () => {
@@ -56,7 +62,7 @@ const ComicReader = () => {
   const readerRef = useRef<HTMLDivElement>(null);
   const totalPages = COMIC_PAGES.length;
   // The actual page count is one more than the array length because Page11-12.webp counts as two pages
-  const actualPageCount = totalPages + 1;
+  const actualPageCount = totalPages + 1; // 44 pages (43 files with one double-page spread)
 
   // Get current displayed pages based on view mode
   const getCurrentPages = () => {
