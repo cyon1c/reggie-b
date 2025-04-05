@@ -4,7 +4,8 @@ import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 
 // Define the comic pages - now using Vercel storage URLs
-const VERCEL_STORAGE_URL = 'https://first-comic.vercel-storage.com';
+//DO NOT CHANGE. THIS IS THE CORRECT BASE URL.
+const VERCEL_STORAGE_URL = 'https://xacnaqrj5ebpenry.public.blob.vercel-storage.com';
 
 const COMIC_PAGES = [
   { src: `${VERCEL_STORAGE_URL}/issue-one/Page1.webp`, alt: 'Page 1' },
@@ -49,6 +50,7 @@ const COMIC_PAGES = [
   { src: `${VERCEL_STORAGE_URL}/issue-one/Page41.webp`, alt: 'Page 41' },
   { src: `${VERCEL_STORAGE_URL}/issue-one/Page42.webp`, alt: 'Page 42' },
   { src: `${VERCEL_STORAGE_URL}/issue-one/Page43.webp`, alt: 'Page 43' },
+  { src: `${VERCEL_STORAGE_URL}/issue-one/Page44.webp`, alt: 'Page 44' },
 ];
 
 const ComicReader = () => {
