@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Navigation from '../../components/Navigation';
 import Footer from '../../components/Footer';
+import SpoilerTicker from '../../components/SpoilerTicker';
 
 export default function CharactersPage() {
   return (
@@ -24,6 +25,8 @@ export default function CharactersPage() {
           </h1>
         </div>
       </section>
+
+      <SpoilerTicker />
 
       {/* Reggie Bloodletter */}
       <section className="py-20 bg-darker">
