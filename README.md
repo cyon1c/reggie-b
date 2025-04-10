@@ -1,6 +1,6 @@
 # BLOODLETTER HQ
 
-A modern, responsive website for the Bloodletter comic series set in the cyberpunk world of Neo Fortuna.
+A modern, responsive website for the Bloodletter comic series set in the cyberpunk world of New Libertalia.
 
 ## Features
 

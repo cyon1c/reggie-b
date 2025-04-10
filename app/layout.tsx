@@ -30,7 +30,7 @@ const permanentMarker = Permanent_Marker({
 
 export const metadata: Metadata = {
   title: 'BLOODLETTER HQ',
-  description: 'Enter Neo Fortuna: Uncover the Truth, Survive the Chaos.',
+  description: 'Enter New Libertalia: Uncover the Truth, Survive the Chaos.',
 };
 
 export default function RootLayout({

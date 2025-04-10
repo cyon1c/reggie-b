@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import Navigation from '../../components/Navigation';
 import Footer from '../../components/Footer';
+import EmailSignupForm from '../../components/EmailSignupForm';
 
 export default function AboutPage() {
   return (
@@ -34,7 +35,7 @@ export default function AboutPage() {
                 Brenton <span className="text-primary">Peplinski</span>
               </h2>
               <p className="text-xl text-white mb-6">
-                Brenton Peplinski, the creative force behind the Bloodletter comic series, draws from a diverse background that uniquely positions him to craft this immersive and gritty cyberpunk narrative. With a foundation rooted in military experience, Peplinski understands themes of resilience, discipline, and the struggle for survival, which permeate the dystopian world of Neo Fortuna.
+                Brenton Peplinski, the creative force behind the Bloodletter comic series, draws from a diverse background that uniquely positions him to craft this immersive and gritty cyberpunk narrative. With a foundation rooted in military experience, Peplinski understands themes of resilience, discipline, and the struggle for survival, which permeate the dystopian world of New Libertalia.
               </p>
               <p className="text-xl text-white">
                 His years of artistic practice—spanning illustration, graphic design, and storytelling—provide the visual and narrative depth that define the Bloodletter series.
@@ -133,12 +134,7 @@ export default function AboutPage() {
           <p className="text-xl text-white mb-12">
             Follow Brenton's creative journey and get exclusive behind-the-scenes content, development updates, and early access to new Bloodletter materials.
           </p>
-          <a href="mailto:brenton.peplinski@yahoo.com?subject=Contact%20from%20About%20Page" className="neon-button text-xl py-4 px-10 mr-4 mb-4 inline-block">
-            Contact
-          </a>
-          <a href="/shop" className="neon-button text-xl py-4 px-10 mb-4 inline-block">
-            Support the Comic
-          </a>
+          <EmailSignupForm />
         </div>
       </section>
 
