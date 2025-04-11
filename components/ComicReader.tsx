@@ -63,8 +63,10 @@ const ComicReader = () => {
   const [isSpreadView, setIsSpreadView] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [visiblePages, setVisiblePages] = useState<number[]>([]);
+  const [showLegend, setShowLegend] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const readerRef = useRef<HTMLDivElement>(null);
+  const legendRef = useRef<HTMLDivElement>(null);
   const totalPageFiles = COMIC_PAGES.length;
   // The actual page count is 44 (43 files + 1 extra from the double-page spread)
   const actualPageCount = 44;
@@ -386,6 +388,29 @@ const ComicReader = () => {
   // Get pages to display
   const pagesToShow = getCurrentPages();
 
+  // Toggle legend visibility
+  const toggleLegend = () => {
+    setShowLegend(!showLegend);
+  };
+
+  // Handle closing the legend when clicking outside of it
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (showLegend && 
+          legendRef.current && 
+          !legendRef.current.contains(event.target as Node) && 
+          // Ignore clicks on the help button itself
+          !(event.target as Element)?.closest('[aria-label="Help / Controls Legend"]')) {
+        setShowLegend(false);
+      }
+    };
+    
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showLegend]);
+
   return (
     <div className="comic-reader" ref={containerRef}>
       <div 
@@ -400,10 +425,23 @@ const ComicReader = () => {
               {isSpreadView && pagesToShow.length > 1 
                 ? `Pages ${getDisplayPageNumber(pagesToShow[0])}-${getDisplayPageNumber(pagesToShow[1])} of ${totalPageFiles}` 
                 : currentPage === 11
-                  ? `Pages 12-13 of ${totalPageFiles}`
+                  ? `Pages 11-12 of ${totalPageFiles}`
                   : `Page ${getDisplayPageNumber(currentPage)} of ${totalPageFiles}`
               }
             </div>
+            
+            {/* Legend/Help Button */}
+            <button
+              onClick={toggleLegend}
+              className="p-2 rounded-full bg-darker/80 text-white hover:bg-primary/80 border border-primary"
+              aria-label="Help / Controls Legend"
+              title="Help / Controls Legend"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
+              </svg>
+            </button>
             
             {/* Spread View Toggle Button */}
             <button
@@ -442,6 +480,83 @@ const ComicReader = () => {
             </button>
           </div>
         </div>
+
+        {/* Legend Popup */}
+        {showLegend && (
+          <div 
+            ref={legendRef}
+            className="absolute top-20 right-4 w-80 bg-darker p-4 rounded-lg shadow-lg border border-primary z-30 text-white"
+          >
+            <div className="flex justify-between items-center mb-2">
+              <h3 className="font-display text-primary text-lg">Controls Legend</h3>
+              <button 
+                onClick={toggleLegend}
+                className="text-white hover:text-primary"
+                aria-label="Close legend"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                  <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                </svg>
+              </button>
+            </div>
+            
+            <div className="text-sm space-y-3">
+              <div className="grid grid-cols-8 gap-2 items-center">
+                <div className="col-span-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783z"/>
+                  </svg>
+                </div>
+                <div className="col-span-7">Toggle between single and two-page view</div>
+                
+                <div className="col-span-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M1.5 1a.5.5 0 0 0-.5.5v4a.5.5 0 0 1-1 0v-4A1.5 1.5 0 0 1 1.5 0h4a.5.5 0 0 1 0 1h-4zM10 .5a.5.5 0 0 1 .5-.5h4A1.5 1.5 0 0 1 16 1.5v4a.5.5 0 0 1-1 0v-4a.5.5 0 0 0-.5-.5h-4a.5.5 0 0 1-.5-.5zM.5 10a.5.5 0 0 1 .5.5v4a.5.5 0 0 0 .5.5h4a.5.5 0 0 1 0 1h-4A1.5 1.5 0 0 1 0 14.5v-4a.5.5 0 0 1 .5-.5zm15 0a.5.5 0 0 1 .5.5v4a1.5 1.5 0 0 1-1.5 1.5h-4a.5.5 0 0 1 0-1h4a.5.5 0 0 0 .5-.5v-4a.5.5 0 0 1 .5-.5z"/>
+                  </svg>
+                </div>
+                <div className="col-span-7">Toggle fullscreen mode</div>
+                
+                <div className="col-span-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z"/>
+                  </svg>
+                </div>
+                <div className="col-span-7">Previous page</div>
+                
+                <div className="col-span-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
+                  </svg>
+                </div>
+                <div className="col-span-7">Next page</div>
+              </div>
+              
+              <div className="border-t border-gray-700 pt-2">
+                <p className="font-semibold mb-1">Keyboard Shortcuts:</p>
+                <div className="grid grid-cols-4 gap-2">
+                  <div className="col-span-1 font-mono bg-gray-800 text-center rounded px-1">←</div>
+                  <div className="col-span-3">Previous page</div>
+                  
+                  <div className="col-span-1 font-mono bg-gray-800 text-center rounded px-1">→</div>
+                  <div className="col-span-3">Next page</div>
+                  
+                  <div className="col-span-1 font-mono bg-gray-800 text-center rounded px-1">F</div>
+                  <div className="col-span-3">Toggle fullscreen</div>
+                  
+                  <div className="col-span-1 font-mono bg-gray-800 text-center rounded px-1">S</div>
+                  <div className="col-span-3">Toggle spread view</div>
+                  
+                  <div className="col-span-1 font-mono bg-gray-800 text-center rounded px-1">Esc</div>
+                  <div className="col-span-3">Exit fullscreen</div>
+                </div>
+              </div>
+              
+              <div className="border-t border-gray-700 pt-2 text-xs text-gray-400">
+                Click anywhere on the left/right side of the comic to navigate between pages.
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Comic Viewer */}
         <div className="relative mx-auto rounded overflow-hidden">
