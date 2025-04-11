@@ -35,7 +35,7 @@ export default function AboutPage() {
                 Brenton <span className="text-primary">Peplinski</span>
               </h2>
               <p className="text-xl text-white mb-6">
-                Brenton Peplinski, the creative force behind the Bloodletter comic series, draws from a diverse background that uniquely positions him to craft this immersive and gritty cyberpunk narrative. With a foundation rooted in military experience, Peplinski understands themes of resilience, discipline, and the struggle for survival, which permeate the dystopian world of New Libertalia.
+                Brenton Peplinski, the creative force behind the Bloodletter comic series, draws from a diverse background that makes him uniquely skilled to build this immersive and gritty cyberpunk narrative. With a foundation rooted in military experience, Peplinski understands themes of resilience, discipline, and the struggle for survival, which permeate the dystopian world of New Libertalia.
               </p>
               <p className="text-xl text-white">
                 His years of artistic practice—spanning illustration, graphic design, and storytelling—provide the visual and narrative depth that define the Bloodletter series.
@@ -75,10 +75,10 @@ export default function AboutPage() {
                 The <span className="text-primary">Journey</span>
               </h2>
               <p className="text-xl text-white mb-6">
-                Peplinksi's journey into storytelling began long before Bloodletter. From crafting short films and visual projects to designing complex characters and worlds, his passion for blending visuals with deep, emotionally driven narratives has always been at the core of his work.
+                Peplinksi's journey into storytelling began long before Bloodletter. From creating short films and visual projects to designing complex characters and worlds, his passion for blending visuals with deep, emotionally driven narratives has always been at the core of his work.
               </p>
               <p className="text-xl text-white mb-6">
-                As a long-time fan of cyberpunk aesthetics, he has immersed himself in the genre, absorbing its visual language and themes of societal collapse and resistance. This personal connection to the world of cyberpunk not only informs his artistic choices but also drives his commitment to crafting stories that challenge conventional narratives.
+                As a long-time fan of cyberpunk aesthetics, he has immersed himself in its visual language and themes of societal collapse and resistance. This personal connection not only informs his artistic choices but also drives him to craft stories that challenge conventional narratives.
               </p>
             </div>
           </div>
@@ -97,7 +97,7 @@ export default function AboutPage() {
                 Bloodletter emerged as a response to Peplinski's desire to create a story that resonates with those who feel like outsiders—people who question authority and fight to define their place in a chaotic world.
               </p>
               <p className="text-xl text-white mb-6">
-                Through Bloodletter, Peplinski aims to connect with creative, tech-savvy individuals who crave storytelling that doesn't shy away from complexity or raw emotion. He invites readers to join the journey, not just as spectators but as allies in the fight for truth and identity.
+                Through Bloodletter, Peplinski aims to connect with individuals who crave storytelling that doesn't shy away from complexity or raw emotion. He invites readers to join the journey, not just as spectators but as allies in the fight for truth and identity.
               </p>
               <p className="text-xl text-white">
                 At its heart, Bloodletter is more than just a comic—it's a call to those who see the world differently, who feel caught between societal expectations and personal convictions. Peplinski hopes that through Bloodletter, readers will find inspiration to embrace their own unique paths and stand resilient in the face of adversity.
