@@ -71,7 +71,7 @@ const ComicReader = () => {
 
   // Get current displayed pages based on view mode
   const getCurrentPages = () => {
-    // Special case for combined pages (12-13 spread)
+    // Special case for combined pages (11-12 spread)
     if (currentPage === 11) { // Index 11 is the combined Page11x12 Final.webp
       return [11]; // Return just this page as it's already a spread
     }
@@ -87,31 +87,32 @@ const ComicReader = () => {
     }
     
     // For spread view, show two pages side by side
-    // We want to show pairs like 2-3, 4-5, 6-7, etc.
-    // So we need to adjust the current page to align with these pairs
+    // We want pairs like (1,2), (3,4), (5,6), etc.
+    // So odd-numbered indices should be the first in each pair
     
-    // Calculate the base page for the spread (odd number)
-    const basePage = currentPage % 2 === 1 ? currentPage : currentPage - 1;
+    // Ensure we're on an odd-indexed page for the start of a pair
+    const basePageIndex = currentPage % 2 === 1 ? currentPage : currentPage - 1;
     
-    // Special handling for pages around the combined spread
-    if (basePage === 10) { // Page 11
-      return [10]; // Show alone before the spread
-    }
-    if (basePage === 12) { // Page 14
-      return [12, 13]; // Start new spread after the combined spread
-    }
-    
-    // Normal case: show the current page and next page
-    return basePage + 1 < totalPageFiles 
-      ? [basePage, basePage + 1] 
-      : [basePage];
+    // Make sure we don't go beyond the total pages
+    return basePageIndex + 1 < totalPageFiles 
+      ? [basePageIndex, basePageIndex + 1] 
+      : [basePageIndex];
   };
 
   // Helper function to get display page number
   const getDisplayPageNumber = (index: number) => {
-    if (index === 11) return '12-13'; // Special case for the double page spread
-    if (index > 11) return (index + 2).toString(); // Skip page 13 by adding 2 to indices after the spread
-    return (index + 1).toString(); // For pages before the spread, add 1 to the index
+    // The cover is page 0
+    if (index === 0) return "Cover";
+    
+    // Page 11 is actually a combined spread of pages 11-12
+    if (index === 11) return "11-12";
+    
+    // Pages after the combined spread need to be offset by 1
+    // since the index 11 contains both pages 11 and 12
+    if (index > 11) return (index + 1).toString();
+    
+    // For pages before the spread, just add 1 to convert from 0-indexed to 1-indexed
+    return (index + 1).toString();
   };
 
   // Preload adjacent pages for smoother navigation
@@ -263,10 +264,22 @@ const ComicReader = () => {
   const toggleSpreadView = () => {
     // When switching to spread view from single page view,
     // ensure we land on proper spread boundaries
-    if (!isSpreadView && currentPage > 0) {
-      // If we're on an odd page when enabling spread view,
-      // move back one page to align with spread boundaries
-      if (currentPage % 2 === 1) {
+    if (!isSpreadView) {
+      // When enabling spread view, adjust to land on proper page pairs
+      // Cover (page 0) is always shown alone
+      if (currentPage === 0) {
+        // Stay on page 0 (cover)
+      } 
+      // Special handling for pages around the combined spread (11-12)
+      else if (currentPage >= 11 && currentPage < 13) {
+        setCurrentPage(11); // Show the combined spread
+      }
+      else if (currentPage === 13) {
+        setCurrentPage(13); // Keeps 14-15 paired correctly
+      }
+      // For all other pages, ensure we start on even-indexed pages
+      // for proper pairing: (1,2), (3,4), (5,6), etc.
+      else if (currentPage % 2 === 0) {
         setCurrentPage(currentPage - 1);
       }
     }
@@ -307,21 +320,21 @@ const ComicReader = () => {
 
   const goToNextPage = () => {
     if (currentPage < totalPageFiles - 1) {
-      if (isSpreadView && currentPage > 0) {
-        // Special handling for the combined page
-        if (currentPage === 10) { // Before the combined page
-          setCurrentPage(11); // Go directly to the combined page
-        } else if (currentPage === 11) { // After the combined page
-          setCurrentPage(12); // Go to page 14 (index 12)
+      if (isSpreadView) {
+        // Special handling for the combined page and surrounding pages
+        if (currentPage === 9) { // On pages 10-11 (indices 9-10)
+          setCurrentPage(11); // Go to the combined page (11-12)
+        } else if (currentPage === 11) { // On the combined page (11-12)
+          setCurrentPage(13); // Go to pages 14-15 (indices 13-14)
         } else {
           // In spread view, advance by 2 pages
-          // If we're on an odd page, go to the next odd page
-          // If we're on an even page, go to the next odd page
-          const nextPage = currentPage % 2 === 0 ? currentPage + 1 : currentPage + 2;
+          // Ensure we're always on an odd-numbered page
+          // so spreads show pages like (1,2), (3,4), (5,6), etc.
+          const nextPage = currentPage % 2 === 1 ? currentPage + 2 : currentPage + 1;
           setCurrentPage(Math.min(nextPage, totalPageFiles - 1));
         }
       } else {
-        // In single page view or when on cover, advance by 1
+        // In single page view, advance by 1
         setCurrentPage(currentPage + 1);
       }
     }
@@ -329,21 +342,20 @@ const ComicReader = () => {
 
   const goToPrevPage = () => {
     if (currentPage > 0) {
-      if (isSpreadView && currentPage > 2) {
-        // Special handling for the combined page
-        if (currentPage === 12) { // After the combined page
-          setCurrentPage(11); // Go back to the combined page
-        } else if (currentPage === 11) { // On the combined page
-          setCurrentPage(10); // Go back to page 11 (index 10)
+      if (isSpreadView) {
+        // Special handling for the combined page and surrounding pages
+        if (currentPage === 13) { // Coming back from pages 14-15 (indices 13-14)
+          setCurrentPage(11); // Go back to the combined page (11-12)
+        } else if (currentPage === 11) { // On the combined page (11-12)
+          setCurrentPage(9); // Go back to pages 10-11 (indices 9-10)
         } else {
-          // In spread view, go back by 2 pages
-          // If we're on an odd page, go to the previous odd page
-          // If we're on an even page, go to the previous odd page
+          // In spread view, go back by 2 pages normally
+          // Ensure we land on odd-numbered pages for proper pairing
           const prevPage = currentPage % 2 === 0 ? currentPage - 1 : currentPage - 2;
-          setCurrentPage(Math.max(1, prevPage));
+          setCurrentPage(Math.max(prevPage, 0));
         }
       } else {
-        // In single page view or when near cover, go back by 1
+        // In single page view, go back by 1
         setCurrentPage(currentPage - 1);
       }
     }
