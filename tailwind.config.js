@@ -16,7 +16,7 @@ module.exports = {
         darker: '#0D0D0D', // Nearly black (same as dark)
       },
       fontFamily: {
-        sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
+        sans: ['var(--font-space-grotesk)', 'system-ui', 'sans-serif'],
         display: ['var(--font-bebas)', 'var(--font-orbitron)', 'system-ui', 'sans-serif'], // Bold display font
         title: ['var(--font-vt323)', 'var(--font-orbitron)', 'monospace'], // Pixelated retro font
       },

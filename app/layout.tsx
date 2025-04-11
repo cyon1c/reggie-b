@@ -1,10 +1,10 @@
 import './globals.css';
 import type { Metadata } from 'next';
-import { Inter, Orbitron, Bebas_Neue, VT323 } from 'next/font/google';
+import { Space_Grotesk, Orbitron, Bebas_Neue, VT323 } from 'next/font/google';
 
-const inter = Inter({ 
+const spaceGrotesk = Space_Grotesk({ 
   subsets: ['latin'],
-  variable: '--font-inter',
+  variable: '--font-space-grotesk',
   display: 'swap',
 });
 
@@ -39,7 +39,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${orbitron.variable} ${bebas.variable} ${vt323.variable}`}>
+    <html lang="en" className={`${spaceGrotesk.variable} ${orbitron.variable} ${bebas.variable} ${vt323.variable}`}>
       <body className="bg-darker">
         {children}
       </body>
