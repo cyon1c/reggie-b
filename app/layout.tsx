@@ -1,6 +1,6 @@
 import './globals.css';
 import type { Metadata } from 'next';
-import { Inter, Orbitron, Bebas_Neue, Permanent_Marker } from 'next/font/google';
+import { Inter, Orbitron, Bebas_Neue, VT323 } from 'next/font/google';
 
 const inter = Inter({ 
   subsets: ['latin'],
@@ -21,10 +21,10 @@ const bebas = Bebas_Neue({
   display: 'swap',
 });
 
-const permanentMarker = Permanent_Marker({
+const vt323 = VT323({
   weight: ['400'],
   subsets: ['latin'],
-  variable: '--font-permanent-marker',
+  variable: '--font-vt323',
   display: 'swap',
 });
 
@@ -39,7 +39,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${orbitron.variable} ${bebas.variable} ${permanentMarker.variable}`}>
+    <html lang="en" className={`${inter.variable} ${orbitron.variable} ${bebas.variable} ${vt323.variable}`}>
       <body className="bg-darker">
         {children}
       </body>
