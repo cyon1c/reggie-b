@@ -223,14 +223,14 @@ const ComicReader = () => {
       }
     } else {
       // Normal calculation for regular pages
-      if (maxHeight / maxWidth > aspectRatio) {
-        // Width is the limiting factor
-        width = maxWidth;
-        height = width * aspectRatio;
-      } else {
-        // Height is the limiting factor
-        height = maxHeight;
-        width = height / aspectRatio;
+    if (maxHeight / maxWidth > aspectRatio) {
+      // Width is the limiting factor
+      width = maxWidth;
+      height = width * aspectRatio;
+    } else {
+      // Height is the limiting factor
+      height = maxHeight;
+      width = height / aspectRatio;
       }
     }
     
@@ -582,19 +582,19 @@ const ComicReader = () => {
               const isLoading = loadingPages.has(pageIndex);
               
               return (
-                <div 
-                  key={`page-${pageIndex}`}
-                  className="relative h-full"
-                  style={{
+              <div 
+                key={`page-${pageIndex}`}
+                className="relative h-full"
+                style={{
                     width: pagesToShow.length > 1 || isDoublePage ? 
                            (isDoublePage ? '100%' : '50%') : '100%'
-                  }}
-                >
+                }}
+              >
                   {isVisible && (
-                    <Image
-                      src={COMIC_PAGES[pageIndex].src}
-                      alt={COMIC_PAGES[pageIndex].alt}
-                      fill
+                <Image
+                  src={COMIC_PAGES[pageIndex].src}
+                  alt={COMIC_PAGES[pageIndex].alt}
+                  fill
                       className={`object-contain ${isDoublePage ? 'object-fit-contain' : ''} transition-opacity duration-300 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
                       priority={i === 0} // Only prioritize the first visible page
                       sizes={pagesToShow.length > 1 || isDoublePage ? (isDoublePage ? "100vw" : "50vw") : "100vw"}
@@ -605,7 +605,7 @@ const ComicReader = () => {
                       unoptimized
                     />
                   )}
-                </div>
+              </div>
               );
             })}
             
@@ -683,18 +683,18 @@ const ComicReader = () => {
                 }
                 
                 return pagesToShow.map((index) => {
-                  const isActive = isSpreadView 
-                    ? pagesToShow.includes(index)
-                    : index === currentPage;
-                  
-                  return (
-                    <button
-                      key={index}
-                      onClick={() => setCurrentPage(index)}
+                const isActive = isSpreadView 
+                  ? pagesToShow.includes(index)
+                  : index === currentPage;
+                
+                return (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentPage(index)}
                       className={`relative h-16 transition-all ${
-                        isActive ? 'border-primary scale-110' : 'border-gray-700 opacity-70'
+                      isActive ? 'border-primary scale-110' : 'border-gray-700 opacity-70'
                       } ${index === 11 ? 'w-24 border-2' : 'w-12 border-2'}`}
-                    >
+                  >
                       <Image
                         src={COMIC_PAGES[index].src}
                         alt={`Thumbnail ${getDisplayPageNumber(index)}`}
@@ -705,11 +705,11 @@ const ComicReader = () => {
                         loading="lazy"
                         unoptimized
                       />
-                      <div className="absolute inset-0 flex items-center justify-center bg-black/50 text-white font-bold">
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/50 text-white font-bold">
                         {getDisplayPageNumber(index)}
-                      </div>
-                    </button>
-                  );
+                    </div>
+                  </button>
+                );
                 });
               })()}
             </div>
