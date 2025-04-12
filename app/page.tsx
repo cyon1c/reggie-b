@@ -65,7 +65,7 @@ export default function Home() {
               <p className="text-xl text-white mb-10 leading-relaxed">
                 Follow Reggie Bloodletter and Glitch as they become infamous bounty hunters and face off against the galaxy's deadliest criminals. From giant evil snakes, corrupt law enforcers, deadly adware AI, slippery alien gangsters, and more than one surprise that will test their moral beliefs, the true nature of their partnership, and the implications of their existence within the galaxy.
               </p>
-              <Link href="/join" className="neon-button text-lg">
+              <Link href="/characters" className="neon-button text-lg">
                 the galaxy so far
               </Link>
             </div>
@@ -105,7 +105,7 @@ export default function Home() {
               </div>
               <h3 className="text-2xl text-primary font-display mb-2">THE WARDENS</h3>
               <p className="text-xl text-white font-title">
-                "Corporate enforcers who maintain their grip on Neo Fortuna through technological dominance and fear."
+                "Corporate enforcers who maintain their grip on New Libertalia through technological dominance and fear."
               </p>
             </div>
             
@@ -135,7 +135,7 @@ export default function Home() {
               </div>
               <h3 className="text-2xl text-primary font-display mb-2">THE RESISTANCE</h3>
               <p className="text-xl text-white font-title">
-                "Underground fighters struggling to restore balance and justice to the ungovernable world of Neo Fortuna."
+                "Underground fighters struggling to restore balance and justice to the ungovernable world of New Libertalia."
               </p>
             </div>
           </div>
@@ -156,7 +156,7 @@ export default function Home() {
             <span className="text-primary">Unite</span>
           </h2>
           <p className="text-center text-2xl text-white mb-16 max-w-3xl mx-auto font-title">
-            Choose your network wisely. The means of communication can define your allegiance in Neo Fortuna.
+            Choose your network wisely. The means of communication can define your allegiance in New Libertalia.
           </p>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12">

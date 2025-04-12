@@ -63,15 +63,17 @@ const ComicReader = () => {
   const [isSpreadView, setIsSpreadView] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [visiblePages, setVisiblePages] = useState<number[]>([]);
+  const [showLegend, setShowLegend] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const readerRef = useRef<HTMLDivElement>(null);
+  const legendRef = useRef<HTMLDivElement>(null);
   const totalPageFiles = COMIC_PAGES.length;
   // The actual page count is 44 (43 files + 1 extra from the double-page spread)
   const actualPageCount = 44;
 
   // Get current displayed pages based on view mode
   const getCurrentPages = () => {
-    // Special case for combined pages (12-13 spread)
+    // Special case for combined pages (11-12 spread)
     if (currentPage === 11) { // Index 11 is the combined Page11x12 Final.webp
       return [11]; // Return just this page as it's already a spread
     }
@@ -87,31 +89,32 @@ const ComicReader = () => {
     }
     
     // For spread view, show two pages side by side
-    // We want to show pairs like 2-3, 4-5, 6-7, etc.
-    // So we need to adjust the current page to align with these pairs
+    // We want pairs like (1,2), (3,4), (5,6), etc.
+    // So odd-numbered indices should be the first in each pair
     
-    // Calculate the base page for the spread (odd number)
-    const basePage = currentPage % 2 === 1 ? currentPage : currentPage - 1;
+    // Ensure we're on an odd-indexed page for the start of a pair
+    const basePageIndex = currentPage % 2 === 1 ? currentPage : currentPage - 1;
     
-    // Special handling for pages around the combined spread
-    if (basePage === 10) { // Page 11
-      return [10]; // Show alone before the spread
-    }
-    if (basePage === 12) { // Page 14
-      return [12, 13]; // Start new spread after the combined spread
-    }
-    
-    // Normal case: show the current page and next page
-    return basePage + 1 < totalPageFiles 
-      ? [basePage, basePage + 1] 
-      : [basePage];
+    // Make sure we don't go beyond the total pages
+    return basePageIndex + 1 < totalPageFiles 
+      ? [basePageIndex, basePageIndex + 1] 
+      : [basePageIndex];
   };
 
   // Helper function to get display page number
   const getDisplayPageNumber = (index: number) => {
-    if (index === 11) return '12-13'; // Special case for the double page spread
-    if (index > 11) return (index + 2).toString(); // Skip page 13 by adding 2 to indices after the spread
-    return (index + 1).toString(); // For pages before the spread, add 1 to the index
+    // The cover is page 0
+    if (index === 0) return "Cover";
+    
+    // Page 11 is actually a combined spread of pages 11-12
+    if (index === 11) return "11-12";
+    
+    // Pages after the combined spread need to be offset by 1
+    // since the index 11 contains both pages 11 and 12
+    if (index > 11) return (index + 1).toString();
+    
+    // For pages before the spread, just add 1 to convert from 0-indexed to 1-indexed
+    return (index + 1).toString();
   };
 
   // Preload adjacent pages for smoother navigation
@@ -220,14 +223,14 @@ const ComicReader = () => {
       }
     } else {
       // Normal calculation for regular pages
-      if (maxHeight / maxWidth > aspectRatio) {
-        // Width is the limiting factor
-        width = maxWidth;
-        height = width * aspectRatio;
-      } else {
-        // Height is the limiting factor
-        height = maxHeight;
-        width = height / aspectRatio;
+    if (maxHeight / maxWidth > aspectRatio) {
+      // Width is the limiting factor
+      width = maxWidth;
+      height = width * aspectRatio;
+    } else {
+      // Height is the limiting factor
+      height = maxHeight;
+      width = height / aspectRatio;
       }
     }
     
@@ -263,10 +266,22 @@ const ComicReader = () => {
   const toggleSpreadView = () => {
     // When switching to spread view from single page view,
     // ensure we land on proper spread boundaries
-    if (!isSpreadView && currentPage > 0) {
-      // If we're on an odd page when enabling spread view,
-      // move back one page to align with spread boundaries
-      if (currentPage % 2 === 1) {
+    if (!isSpreadView) {
+      // When enabling spread view, adjust to land on proper page pairs
+      // Cover (page 0) is always shown alone
+      if (currentPage === 0) {
+        // Stay on page 0 (cover)
+      } 
+      // Special handling for pages around the combined spread (11-12)
+      else if (currentPage >= 11 && currentPage < 13) {
+        setCurrentPage(11); // Show the combined spread
+      }
+      else if (currentPage === 13) {
+        setCurrentPage(13); // Keeps 14-15 paired correctly
+      }
+      // For all other pages, ensure we start on even-indexed pages
+      // for proper pairing: (1,2), (3,4), (5,6), etc.
+      else if (currentPage % 2 === 0) {
         setCurrentPage(currentPage - 1);
       }
     }
@@ -307,21 +322,21 @@ const ComicReader = () => {
 
   const goToNextPage = () => {
     if (currentPage < totalPageFiles - 1) {
-      if (isSpreadView && currentPage > 0) {
-        // Special handling for the combined page
-        if (currentPage === 10) { // Before the combined page
-          setCurrentPage(11); // Go directly to the combined page
-        } else if (currentPage === 11) { // After the combined page
-          setCurrentPage(12); // Go to page 14 (index 12)
+      if (isSpreadView) {
+        // Special handling for the combined page and surrounding pages
+        if (currentPage === 9) { // On pages 10-11 (indices 9-10)
+          setCurrentPage(11); // Go to the combined page (11-12)
+        } else if (currentPage === 11) { // On the combined page (11-12)
+          setCurrentPage(13); // Go to pages 14-15 (indices 13-14)
         } else {
           // In spread view, advance by 2 pages
-          // If we're on an odd page, go to the next odd page
-          // If we're on an even page, go to the next odd page
-          const nextPage = currentPage % 2 === 0 ? currentPage + 1 : currentPage + 2;
+          // Ensure we're always on an odd-numbered page
+          // so spreads show pages like (1,2), (3,4), (5,6), etc.
+          const nextPage = currentPage % 2 === 1 ? currentPage + 2 : currentPage + 1;
           setCurrentPage(Math.min(nextPage, totalPageFiles - 1));
         }
       } else {
-        // In single page view or when on cover, advance by 1
+        // In single page view, advance by 1
         setCurrentPage(currentPage + 1);
       }
     }
@@ -329,21 +344,20 @@ const ComicReader = () => {
 
   const goToPrevPage = () => {
     if (currentPage > 0) {
-      if (isSpreadView && currentPage > 2) {
-        // Special handling for the combined page
-        if (currentPage === 12) { // After the combined page
-          setCurrentPage(11); // Go back to the combined page
-        } else if (currentPage === 11) { // On the combined page
-          setCurrentPage(10); // Go back to page 11 (index 10)
+      if (isSpreadView) {
+        // Special handling for the combined page and surrounding pages
+        if (currentPage === 13) { // Coming back from pages 14-15 (indices 13-14)
+          setCurrentPage(11); // Go back to the combined page (11-12)
+        } else if (currentPage === 11) { // On the combined page (11-12)
+          setCurrentPage(9); // Go back to pages 10-11 (indices 9-10)
         } else {
-          // In spread view, go back by 2 pages
-          // If we're on an odd page, go to the previous odd page
-          // If we're on an even page, go to the previous odd page
+          // In spread view, go back by 2 pages normally
+          // Ensure we land on odd-numbered pages for proper pairing
           const prevPage = currentPage % 2 === 0 ? currentPage - 1 : currentPage - 2;
-          setCurrentPage(Math.max(1, prevPage));
+          setCurrentPage(Math.max(prevPage, 0));
         }
       } else {
-        // In single page view or when near cover, go back by 1
+        // In single page view, go back by 1
         setCurrentPage(currentPage - 1);
       }
     }
@@ -374,6 +388,29 @@ const ComicReader = () => {
   // Get pages to display
   const pagesToShow = getCurrentPages();
 
+  // Toggle legend visibility
+  const toggleLegend = () => {
+    setShowLegend(!showLegend);
+  };
+
+  // Handle closing the legend when clicking outside of it
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (showLegend && 
+          legendRef.current && 
+          !legendRef.current.contains(event.target as Node) && 
+          // Ignore clicks on the help button itself
+          !(event.target as Element)?.closest('[aria-label="Help / Controls Legend"]')) {
+        setShowLegend(false);
+      }
+    };
+    
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showLegend]);
+
   return (
     <div className="comic-reader" ref={containerRef}>
       <div 
@@ -388,10 +425,23 @@ const ComicReader = () => {
               {isSpreadView && pagesToShow.length > 1 
                 ? `Pages ${getDisplayPageNumber(pagesToShow[0])}-${getDisplayPageNumber(pagesToShow[1])} of ${totalPageFiles}` 
                 : currentPage === 11
-                  ? `Pages 12-13 of ${totalPageFiles}`
+                  ? `Pages 11-12 of ${totalPageFiles}`
                   : `Page ${getDisplayPageNumber(currentPage)} of ${totalPageFiles}`
               }
             </div>
+            
+            {/* Legend/Help Button */}
+            <button
+              onClick={toggleLegend}
+              className="p-2 rounded-full bg-darker/80 text-white hover:bg-primary/80 border border-primary"
+              aria-label="Help / Controls Legend"
+              title="Help / Controls Legend"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                <path d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z"/>
+              </svg>
+            </button>
             
             {/* Spread View Toggle Button */}
             <button
@@ -431,6 +481,83 @@ const ComicReader = () => {
           </div>
         </div>
 
+        {/* Legend Popup */}
+        {showLegend && (
+          <div 
+            ref={legendRef}
+            className="absolute top-20 right-4 w-80 bg-darker p-4 rounded-lg shadow-lg border border-primary z-30 text-white"
+          >
+            <div className="flex justify-between items-center mb-2">
+              <h3 className="font-display text-primary text-lg">Controls Legend</h3>
+              <button 
+                onClick={toggleLegend}
+                className="text-white hover:text-primary"
+                aria-label="Close legend"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                  <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                </svg>
+              </button>
+            </div>
+            
+            <div className="text-sm space-y-3">
+              <div className="grid grid-cols-8 gap-2 items-center">
+                <div className="col-span-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783z"/>
+                  </svg>
+                </div>
+                <div className="col-span-7">Toggle between single and two-page view</div>
+                
+                <div className="col-span-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M1.5 1a.5.5 0 0 0-.5.5v4a.5.5 0 0 1-1 0v-4A1.5 1.5 0 0 1 1.5 0h4a.5.5 0 0 1 0 1h-4zM10 .5a.5.5 0 0 1 .5-.5h4A1.5 1.5 0 0 1 16 1.5v4a.5.5 0 0 1-1 0v-4a.5.5 0 0 0-.5-.5h-4a.5.5 0 0 1-.5-.5zM.5 10a.5.5 0 0 1 .5.5v4a.5.5 0 0 0 .5.5h4a.5.5 0 0 1 0 1h-4A1.5 1.5 0 0 1 0 14.5v-4a.5.5 0 0 1 .5-.5zm15 0a.5.5 0 0 1 .5.5v4a1.5 1.5 0 0 1-1.5 1.5h-4a.5.5 0 0 1 0-1h4a.5.5 0 0 0 .5-.5v-4a.5.5 0 0 1 .5-.5z"/>
+                  </svg>
+                </div>
+                <div className="col-span-7">Toggle fullscreen mode</div>
+                
+                <div className="col-span-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="m3.86 8.753 5.482 4.796c.646.566 1.658.106 1.658-.753V3.204a1 1 0 0 0-1.659-.753l-5.48 4.796a1 1 0 0 0 0 1.506z"/>
+                  </svg>
+                </div>
+                <div className="col-span-7">Previous page</div>
+                
+                <div className="col-span-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="m12.14 8.753-5.482 4.796c-.646.566-1.658.106-1.658-.753V3.204a1 1 0 0 1 1.659-.753l5.48 4.796a1 1 0 0 1 0 1.506z"/>
+                  </svg>
+                </div>
+                <div className="col-span-7">Next page</div>
+              </div>
+              
+              <div className="border-t border-gray-700 pt-2">
+                <p className="font-semibold mb-1">Keyboard Shortcuts:</p>
+                <div className="grid grid-cols-4 gap-2">
+                  <div className="col-span-1 font-mono bg-gray-800 text-center rounded px-1">←</div>
+                  <div className="col-span-3">Previous page</div>
+                  
+                  <div className="col-span-1 font-mono bg-gray-800 text-center rounded px-1">→</div>
+                  <div className="col-span-3">Next page</div>
+                  
+                  <div className="col-span-1 font-mono bg-gray-800 text-center rounded px-1">F</div>
+                  <div className="col-span-3">Toggle fullscreen</div>
+                  
+                  <div className="col-span-1 font-mono bg-gray-800 text-center rounded px-1">S</div>
+                  <div className="col-span-3">Toggle spread view</div>
+                  
+                  <div className="col-span-1 font-mono bg-gray-800 text-center rounded px-1">Esc</div>
+                  <div className="col-span-3">Exit fullscreen</div>
+                </div>
+              </div>
+              
+              <div className="border-t border-gray-700 pt-2 text-xs text-gray-400">
+                Click anywhere on the left/right side of the comic to navigate between pages.
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Comic Viewer */}
         <div className="relative mx-auto rounded overflow-hidden">
           {/* Comic Page Image Container */}
@@ -455,19 +582,19 @@ const ComicReader = () => {
               const isLoading = loadingPages.has(pageIndex);
               
               return (
-                <div 
-                  key={`page-${pageIndex}`}
-                  className="relative h-full"
-                  style={{
+              <div 
+                key={`page-${pageIndex}`}
+                className="relative h-full"
+                style={{
                     width: pagesToShow.length > 1 || isDoublePage ? 
                            (isDoublePage ? '100%' : '50%') : '100%'
-                  }}
-                >
+                }}
+              >
                   {isVisible && (
-                    <Image
-                      src={COMIC_PAGES[pageIndex].src}
-                      alt={COMIC_PAGES[pageIndex].alt}
-                      fill
+                <Image
+                  src={COMIC_PAGES[pageIndex].src}
+                  alt={COMIC_PAGES[pageIndex].alt}
+                  fill
                       className={`object-contain ${isDoublePage ? 'object-fit-contain' : ''} transition-opacity duration-300 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
                       priority={i === 0} // Only prioritize the first visible page
                       sizes={pagesToShow.length > 1 || isDoublePage ? (isDoublePage ? "100vw" : "50vw") : "100vw"}
@@ -478,7 +605,7 @@ const ComicReader = () => {
                       unoptimized
                     />
                   )}
-                </div>
+              </div>
               );
             })}
             
@@ -556,18 +683,18 @@ const ComicReader = () => {
                 }
                 
                 return pagesToShow.map((index) => {
-                  const isActive = isSpreadView 
-                    ? pagesToShow.includes(index)
-                    : index === currentPage;
-                  
-                  return (
-                    <button
-                      key={index}
-                      onClick={() => setCurrentPage(index)}
+                const isActive = isSpreadView 
+                  ? pagesToShow.includes(index)
+                  : index === currentPage;
+                
+                return (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentPage(index)}
                       className={`relative h-16 transition-all ${
-                        isActive ? 'border-primary scale-110' : 'border-gray-700 opacity-70'
+                      isActive ? 'border-primary scale-110' : 'border-gray-700 opacity-70'
                       } ${index === 11 ? 'w-24 border-2' : 'w-12 border-2'}`}
-                    >
+                  >
                       <Image
                         src={COMIC_PAGES[index].src}
                         alt={`Thumbnail ${getDisplayPageNumber(index)}`}
@@ -578,11 +705,11 @@ const ComicReader = () => {
                         loading="lazy"
                         unoptimized
                       />
-                      <div className="absolute inset-0 flex items-center justify-center bg-black/50 text-white font-bold">
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/50 text-white font-bold">
                         {getDisplayPageNumber(index)}
-                      </div>
-                    </button>
-                  );
+                    </div>
+                  </button>
+                );
                 });
               })()}
             </div>

@@ -155,8 +155,7 @@ export default function CharactersPage() {
               <p className="text-xl text-white mb-6">
                 The Curator's intelligence and vast expertise is matched by his physical strength and size. 
                 Sporting a powerful metal chassis loaded with hundreds of scientific implements, The Curator 
-                is not to be taken lightly in a fight and poses a serious threat to anyone of any level of skill. 
-                That was, of course, before he fell 20,000 feet.
+                is not to be taken lightly in a fight and poses a serious threat to anyone of any level of skill.
               </p>
               <div className="space-y-4 mt-8">
                 <div className="flex items-center gap-4">
@@ -187,7 +186,7 @@ export default function CharactersPage() {
                         </div>
                       </div>
                       <div className="text-red-500/80 text-lg font-mono mt-2">
-                        STATUS: TERMINATED - FALL FROM 20,000 FT
+                        STATUS: TERMINATED
                       </div>
                     </div>
                   </div>
