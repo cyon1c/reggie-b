@@ -76,12 +76,12 @@ export default function Footer() {
         </div>
         
         {/* Cataclysm Logo */}
-        <div className="flex justify-center mb-10">
+        <div className="flex justify-center mb-0">
           <Image 
-            src="/images/Cataclysm Logo Webp.webp" 
+            src="/images/Cataclysm Logo.webp" 
             alt="Cataclysm Logo" 
-            width={200}
-            height={100}
+            width={120}
+            height={60}
             className="object-contain"
           />
         </div>
