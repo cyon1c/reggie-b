@@ -1,6 +1,7 @@
 "use client"
 
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -38,7 +39,7 @@ export default function Footer() {
           <div>
             <h3 className="font-display text-2xl text-white mb-8 tracking-wide uppercase">Citizen's Log</h3>
             <div className="w-full max-w-md">
-              <form className="flex flex-col gap-4" action="mailto:brenton.peplinski@yahoo.com?subject=Citizen%27s%20Log%20Subscription" method="post" encType="text/plain">
+              <form className="flex flex-col gap-4" action="mailto:bloodlettercomic@gmail.com?subject=Citizen%27s%20Log%20Subscription" method="post" encType="text/plain">
                 <input 
                   type="email" 
                   placeholder="Enter your contact frequency" 
@@ -66,18 +67,29 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <a href="mailto:brenton.peplinski@yahoo.com?subject=Secure%20Channel%20Contact" className="block text-xl text-gray hover:text-primary transition-colors font-display tracking-wide">
-                  brenton.peplinski@yahoo.com
+                <a href="mailto:bloodlettercomic@gmail.com?subject=Secure%20Channel%20Contact" className="block text-xl text-gray hover:text-primary transition-colors font-display tracking-wide">
+                  bloodlettercomic@gmail.com
                 </a>
               </li>
             </ul>
           </div>
         </div>
         
+        {/* Cataclysm Logo */}
+        <div className="flex justify-center mb-10">
+          <Image 
+            src="/images/Cataclysm Logo Webp.webp" 
+            alt="Cataclysm Logo" 
+            width={200}
+            height={100}
+            className="object-contain"
+          />
+        </div>
+        
         {/* Copyright */}
         <div className="border-t border-gray/20 pt-10">
           <p className="text-center text-gray text-lg font-title">
-            © 2025 Bloodletter
+            © 2025 Cataclysm Studios
           </p>
         </div>
       </div>

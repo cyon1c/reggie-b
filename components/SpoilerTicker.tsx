@@ -86,16 +86,16 @@ export default function SpoilerTicker() {
   const tickerContent = (
     <div className="inline-block whitespace-nowrap text-white font-title text-xl" ref={tickerContentRef}>
       <span className="text-primary font-bold mr-4">⚠️ WARNING:</span>
-      This page may contain spoilers. It is recommended to read the comic book first.
+      THIS PAGE MAY CONTAIN SPOILERS. IT IS RECOMMENDED TO READ THE COMIC BOOK FIRST.
       <span className="mx-8">•</span>
       <span className="text-primary font-bold mr-4">⚠️ WARNING:</span>
-      This page may contain spoilers. It is recommended to read the comic book first.
+      THIS PAGE MAY CONTAIN SPOILERS. IT IS RECOMMENDED TO READ THE COMIC BOOK FIRST.
       <span className="mx-8">•</span>
       <span className="text-primary font-bold mr-4">⚠️ WARNING:</span>
-      This page may contain spoilers. It is recommended to read the comic book first.
+      THIS PAGE MAY CONTAIN SPOILERS. IT IS RECOMMENDED TO READ THE COMIC BOOK FIRST.
       <span className="mx-8">•</span>
       <span className="text-primary font-bold mr-4">⚠️ WARNING:</span>
-      This page may contain spoilers. It is recommended to read the comic book first.
+      THIS PAGE MAY CONTAIN SPOILERS. IT IS RECOMMENDED TO READ THE COMIC BOOK FIRST.
       <span className="mx-8">•</span>
     </div>
   );

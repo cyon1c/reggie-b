@@ -12,7 +12,7 @@ export default function CharactersPage() {
       <section className="relative pt-32 pb-16 bg-dark">
         <div className="absolute inset-0 opacity-20">
           <Image 
-            src="/images/reggie-close-up.jpg" 
+            src="/images/Banner 5.webp" 
             alt="Bloodletter background" 
             fill 
             className="object-cover object-center"
@@ -67,7 +67,7 @@ export default function CharactersPage() {
             </div>
             <div className="relative aspect-square rounded-lg overflow-hidden neon-border">
               <Image 
-                src="/images/reggie.jpg" 
+                src="/images/CHARACTERS Reggie.webp" 
                 alt="Reggie Bloodletter character" 
                 fill 
                 className="object-cover"
@@ -111,22 +111,12 @@ export default function CharactersPage() {
               </div>
             </div>
             <div className="relative aspect-square rounded-lg overflow-hidden neon-border md:order-1">
-              <div className="w-full h-full bg-blue-900/30 flex items-center justify-center">
-                <div className="p-10 w-full h-full relative">
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-full h-full flex flex-col items-center justify-center gap-2">
-                      <div className="text-primary text-7xl font-bold glitch-effect">GLITCH</div>
-                      <div className="border-2 border-primary w-3/4 h-64 relative overflow-hidden rounded">
-                        <div className="absolute inset-0 bg-gradient-to-b from-primary/20 to-transparent animate-pulse"></div>
-                        <div className="absolute inset-0 flex items-center justify-center text-primary/70 text-sm font-mono">
-                          DIGITAL ENTITY FORMAT <br/>
-                          AWAITING VISUALIZATION
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <Image 
+                src="/images/CHARACTERS Glitch.webp" 
+                alt="Glitch character" 
+                fill 
+                className="object-cover"
+              />
             </div>
           </div>
         </div>
@@ -173,25 +163,12 @@ export default function CharactersPage() {
               </div>
             </div>
             <div className="relative aspect-square rounded-lg overflow-hidden neon-border">
-              <div className="w-full h-full bg-red-900/30 flex items-center justify-center">
-                <div className="p-6 w-full h-full relative">
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-full h-full flex flex-col items-center justify-center gap-4">
-                      <div className="text-red-500 text-6xl font-bold mb-4">THE CURATOR</div>
-                      <div className="border-2 border-red-500 w-3/4 h-3/5 relative overflow-hidden rounded-lg">
-                        <div className="absolute inset-0 bg-gradient-to-b from-red-500/20 to-transparent"></div>
-                        <div className="absolute inset-0 flex items-center justify-center text-red-500/70 text-sm font-mono">
-                          CLASSIFIED SUBJECT FILE <br/>
-                          BIOHAZARD LEVEL: EXTREME
-                        </div>
-                      </div>
-                      <div className="text-red-500/80 text-lg font-mono mt-2">
-                        STATUS: TERMINATED
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <Image 
+                src="/images/CHARACTERS Curator.webp" 
+                alt="Kuku-Kana The Curator character" 
+                fill 
+                className="object-cover"
+              />
             </div>
           </div>
         </div>
