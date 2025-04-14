@@ -41,6 +41,13 @@ h1, h2, h3, h4, h5, h6 {
 @layer components {
   .neon-button {
     @apply px-6 py-3 bg-transparent border-2 border-primary text-white font-bold transition-all hover:bg-primary hover:text-white hover:shadow-[0_0_15px_rgba(242,12,31,0.7)] duration-300 uppercase tracking-super font-display;
+    min-height: 3.5rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    white-space: normal;
+    word-wrap: break-word;
   }
   
   .neon-border {

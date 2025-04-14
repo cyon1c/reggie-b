@@ -214,7 +214,7 @@ export default function Home() {
                       <path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z" />
                     </svg>
               </div>
-                  <Link href="mailto:brenton.peplinski@yahoo.com?subject=Direct%20Intel%20Exchange" className="text-white hover:text-primary transition-colors text-center border border-primary px-4 py-2 w-full hover:bg-black/30 flex items-center justify-center min-h-[60px]">
+                  <Link href="mailto:bloodlettercomic@gmail.com?subject=Direct%20Intel%20Exchange" className="text-white hover:text-primary transition-colors text-center border border-primary px-4 py-2 w-full hover:bg-black/30 flex items-center justify-center gap-2">
                     Direct Intel Exchanges
                   </Link>
             </div>
