@@ -12,7 +12,7 @@ export default function CharactersPage() {
       <section className="relative pt-32 pb-16 bg-dark">
         <div className="absolute inset-0 opacity-20">
           <Image 
-            src="/images/Banner 5.webp" 
+            src="/images/Banner 1.webp" 
             alt="Bloodletter background" 
             fill 
             className="object-cover object-center"

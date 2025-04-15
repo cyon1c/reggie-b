@@ -1,3 +1,5 @@
+"use client"
+
 import Image from 'next/image';
 import Link from 'next/link';
 import Navigation from '../components/Navigation';
@@ -9,23 +11,24 @@ export default function Home() {
       <Navigation />
       
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center overflow-hidden pb-16 pt-32">
+      <section className="relative flex items-center justify-center overflow-hidden pb-16 pt-32 min-h-[90vh]">
         {/* Hero background image */}
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/60 to-darker z-10"></div>
-          <div className="relative h-full w-full">
+          <div className="relative w-full h-[50vh] md:h-[70vh] lg:h-[80vh] overflow-hidden">
             {/* Using comic intro art as hero background */}
             <Image 
-              src="/images/reggie-close-up.jpg" 
-              alt="Bloodletter close up" 
+              src="/images/Page11x12 Final.webp" 
+              alt="Bloodletter Comic Spread" 
               fill 
               className="object-cover object-center opacity-95"
               priority
+              sizes="100vw"
             />
           </div>
         </div>
         
-        <div className="relative z-20 text-center max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="relative z-20 text-center max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
           <p className="text-2xl md:text-3xl font-title text-white mb-12 max-w-3xl mx-auto leading-relaxed pt-16">
             Invisible spaceships, psychopath alien mercenaries, corrupt genocidal politicians, and giant, evil space snakes. What else is new when you're the intergalactic bounty hunter known as-
           </p>
@@ -77,7 +80,7 @@ export default function Home() {
                   alt="Bloodletter" 
                   fill 
                   className="object-contain"
-                  sizes="(max-width: 768px) 100vw, 50vw"
+                  sizes="(max-width: 768px) 100vw, 45vw"
                 />
               </div>
             </div>
@@ -101,6 +104,7 @@ export default function Home() {
                   alt="The Wardens" 
                   fill 
                   className="object-cover object-center"
+                  sizes="(max-width: 768px) 100vw, 30vw"
                 />
               </div>
               <h3 className="text-2xl text-primary font-display mb-2">THE WARDENS</h3>
@@ -116,6 +120,7 @@ export default function Home() {
                   alt="The Bounty Hunters" 
                   fill 
                   className="object-cover object-center"
+                  sizes="(max-width: 768px) 100vw, 30vw"
                 />
               </div>
               <h3 className="text-2xl text-primary font-display mb-2">THE BOUNTY HUNTERS</h3>
@@ -131,6 +136,7 @@ export default function Home() {
                   alt="The Resistance" 
                   fill 
                   className="object-cover object-center"
+                  sizes="(max-width: 768px) 100vw, 30vw"
                 />
               </div>
               <h3 className="text-2xl text-primary font-display mb-2">THE RESISTANCE</h3>
@@ -214,7 +220,7 @@ export default function Home() {
                       <path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z" />
                     </svg>
               </div>
-                  <Link href="mailto:bloodlettercomic@gmail.com?subject=Direct%20Intel%20Exchange" className="text-white hover:text-primary transition-colors text-center border border-primary px-4 py-2 w-full hover:bg-black/30 flex items-center justify-center gap-2">
+                  <Link href="mailto:BloodletterHQ@gmail.com?subject=Direct%20Intel%20Exchange" className="text-white hover:text-primary transition-colors text-center border border-primary px-4 py-2 w-full hover:bg-black/30 flex items-center justify-center gap-2">
                     Direct Intel Exchanges
                   </Link>
             </div>

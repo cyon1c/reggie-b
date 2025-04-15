@@ -39,7 +39,33 @@ export default function Footer() {
           <div>
             <h3 className="font-display text-2xl text-white mb-8 tracking-wide uppercase">Citizen's Log</h3>
             <div className="w-full max-w-md">
-              <form className="flex flex-col gap-4" action="mailto:bloodlettercomic@gmail.com?subject=Citizen%27s%20Log%20Subscription" method="post" encType="text/plain">
+              <form className="flex flex-col gap-4" onSubmit={async (e) => {
+                e.preventDefault();
+                const formData = new FormData(e.currentTarget);
+                const email = formData.get('email') as string;
+
+                try {
+                  const response = await fetch('/api/newsletter', {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 
+                      email,
+                      source: 'newsletter_footer'
+                    }),
+                  });
+
+                  if (response.ok) {
+                    alert('Thank you for subscribing!');
+                    e.currentTarget.reset();
+                  } else {
+                    throw new Error('Failed to subscribe');
+                  }
+                } catch (error) {
+                  alert('Failed to subscribe. Please try again later.');
+                }
+              }}>
                 <input 
                   type="email" 
                   placeholder="Enter your contact frequency" 
@@ -67,8 +93,8 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <a href="mailto:bloodlettercomic@gmail.com?subject=Secure%20Channel%20Contact" className="block text-xl text-gray hover:text-primary transition-colors font-display tracking-wide">
-                  bloodlettercomic@gmail.com
+                <a href="mailto:BloodletterHQ@gmail.com?subject=Secure%20Channel%20Contact" className="block text-xl text-gray hover:text-primary transition-colors font-display tracking-wide">
+                  BloodletterHQ@gmail.com
                 </a>
               </li>
             </ul>

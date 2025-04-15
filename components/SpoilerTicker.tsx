@@ -4,30 +4,31 @@ import { useEffect, useState, useRef } from 'react';
 
 export default function SpoilerTicker() {
   const [position, setPosition] = useState(0);
-  const tickerContentRef = useRef<HTMLDivElement>(null);
+  const tickerRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [contentWidth, setContentWidth] = useState(0);
+  const [tickerWidth, setTickerWidth] = useState(0);
   const [animationPaused, setAnimationPaused] = useState(false);
 
   useEffect(() => {
-    const tickerContent = tickerContentRef.current;
+    const ticker = tickerRef.current;
     const container = containerRef.current;
-    if (!tickerContent || !container) return;
+    if (!ticker || !container) return;
 
-    // Get initial measurements
+    // Get the width of a single ticker element
     const updateMeasurements = () => {
-      const width = tickerContent.offsetWidth;
-      setContentWidth(width);
+      setTickerWidth(ticker.offsetWidth / 3); // We have 3 copies in the ticker
     };
     
     updateMeasurements();
 
+    // Start the animation immediately
     let animationFrame: number;
     let lastTime = performance.now();
     const speed = 60; // pixels per second
 
     const animate = (currentTime: number) => {
       if (animationPaused) {
+        lastTime = currentTime; // Update lastTime to prevent jumps
         animationFrame = requestAnimationFrame(animate);
         return;
       }
@@ -35,15 +36,13 @@ export default function SpoilerTicker() {
       const deltaTime = currentTime - lastTime;
       lastTime = currentTime;
 
-      // Only update if enough time has passed (prevents jank on inactive tabs)
-      if (deltaTime < 1000) {
+      if (deltaTime < 1000) { // Only update if tab is active
         setPosition((prev) => {
           const newPosition = prev - (speed * deltaTime) / 1000;
           
-          // Simple reset logic: when the first copy moves completely out of view,
-          // reset position to create a seamless loop
-          if (newPosition <= -contentWidth) {
-            return newPosition + contentWidth;
+          // Reset position when one copy moves off-screen
+          if (newPosition <= -tickerWidth) {
+            return newPosition + tickerWidth;
           }
           
           return newPosition;
@@ -53,22 +52,19 @@ export default function SpoilerTicker() {
       animationFrame = requestAnimationFrame(animate);
     };
 
+    // Start the animation
     animationFrame = requestAnimationFrame(animate);
 
-    // Handle resize to recalculate dimensions
+    // Handle window resize
     const handleResize = () => {
       updateMeasurements();
-      // Reset position on resize to prevent visual glitches
-      setPosition(0);
     };
 
-    // Handle visibility change to pause animation when tab is not visible
+    // Handle visibility change
     const handleVisibilityChange = () => {
-      if (document.hidden) {
-        setAnimationPaused(true);
-      } else {
-        setAnimationPaused(false);
-        lastTime = performance.now(); // Reset time to prevent jumps
+      setAnimationPaused(document.hidden);
+      if (!document.hidden) {
+        lastTime = performance.now();
       }
     };
 
@@ -80,24 +76,15 @@ export default function SpoilerTicker() {
       window.removeEventListener('resize', handleResize);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
-  }, [animationPaused]);
+  }, [animationPaused, tickerWidth]);
 
-  // Single ticker content - long enough to fill the screen
-  const tickerContent = (
-    <div className="inline-block whitespace-nowrap text-white font-title text-xl" ref={tickerContentRef}>
+  // Single warning message
+  const warningMessage = (
+    <span className="inline-flex items-center whitespace-nowrap">
       <span className="text-primary font-bold mr-4">⚠️ WARNING:</span>
       THIS PAGE MAY CONTAIN SPOILERS. IT IS RECOMMENDED TO READ THE COMIC BOOK FIRST.
       <span className="mx-8">•</span>
-      <span className="text-primary font-bold mr-4">⚠️ WARNING:</span>
-      THIS PAGE MAY CONTAIN SPOILERS. IT IS RECOMMENDED TO READ THE COMIC BOOK FIRST.
-      <span className="mx-8">•</span>
-      <span className="text-primary font-bold mr-4">⚠️ WARNING:</span>
-      THIS PAGE MAY CONTAIN SPOILERS. IT IS RECOMMENDED TO READ THE COMIC BOOK FIRST.
-      <span className="mx-8">•</span>
-      <span className="text-primary font-bold mr-4">⚠️ WARNING:</span>
-      THIS PAGE MAY CONTAIN SPOILERS. IT IS RECOMMENDED TO READ THE COMIC BOOK FIRST.
-      <span className="mx-8">•</span>
-    </div>
+    </span>
   );
 
   return (
@@ -105,29 +92,16 @@ export default function SpoilerTicker() {
       ref={containerRef}
       className="w-full overflow-hidden bg-primary/30 border-y-2 border-primary/50 py-4"
     >
-      <div className="relative whitespace-nowrap">
-        {/* First copy of the ticker content */}
+      <div className="relative">
         <div 
-          className="inline-block text-white font-title text-xl"
+          ref={tickerRef}
+          className="inline-flex whitespace-nowrap text-white font-title text-xl"
           style={{ transform: `translateX(${position}px)` }}
         >
-          {tickerContent}
-        </div>
-        
-        {/* Second copy positioned right after the first copy */}
-        <div 
-          className="inline-block text-white font-title text-xl"
-          style={{ transform: `translateX(${position + contentWidth}px)` }}
-        >
-          {tickerContent}
-        </div>
-        
-        {/* Third copy for extra safety */}
-        <div 
-          className="inline-block text-white font-title text-xl"
-          style={{ transform: `translateX(${position + contentWidth * 2}px)` }}
-        >
-          {tickerContent}
+          {/* Just use 3 copies of the warning message */}
+          {warningMessage}
+          {warningMessage}
+          {warningMessage}
         </div>
       </div>
     </div>

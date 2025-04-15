@@ -31,6 +31,10 @@ const vt323 = VT323({
 export const metadata: Metadata = {
   title: 'BLOODLETTER HQ',
   description: 'Enter New Libertalia: Uncover the Truth, Survive the Chaos.',
+  icons: {
+    icon: '/favicon.webp',
+    apple: '/favicon.webp',
+  },
 };
 
 export default function RootLayout({

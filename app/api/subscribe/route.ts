@@ -17,7 +17,7 @@ export async function POST(request: Request) {
     // Email content
     const mailOptions = {
       from: process.env.EMAIL_USER,
-      to: 'bloodlettercomic@gmail.com',
+      to: 'BloodletterHQ@gmail.com',
       subject: 'New Bloodletter Subscriber',
       text: `New subscriber: ${email}\n\nThis email was submitted through the Bloodletter website.`,
       html: `
