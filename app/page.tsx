@@ -53,9 +53,22 @@ export default function Home() {
       {/* Overview Section */}
       <section className="py-24 bg-dark">
         <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row items-center gap-16">
-            <div className="md:w-[55%]">
+          <div className="flex flex-col">
+            <div className="w-full px-0 md:px-8 lg:px-12">
               <h2 className="text-5xl md:text-7xl font-display mb-10 text-white tracking-wide leading-none">First stop, <span className="text-primary">New Libertalia</span></h2>
+              
+              {/* Banner image */}
+              <div className="w-full mb-10">
+                <Image 
+                  src="/images/Banner 5.webp" 
+                  alt="New Libertalia Banner" 
+                  width={2421}
+                  height={700}
+                  className="w-full h-auto"
+                  priority
+                />
+              </div>
+              
               <p className="text-xl text-white mb-6 leading-relaxed">
                 Finally escaping Collective-controlled space, Reggie Bloodletter and his partner, a digital alien mouse named Glitch, are new fish entering a world of veteran bounty hunters. Reggie and Glitch arrive in New Libertalia, to start new lives, but before they can, they have some business to finish.
               </p>
@@ -68,20 +81,10 @@ export default function Home() {
               <p className="text-xl text-white mb-10 leading-relaxed">
                 Follow Reggie Bloodletter and Glitch as they become infamous bounty hunters and face off against the galaxy's deadliest criminals. From giant evil snakes, corrupt law enforcers, deadly adware AI, slippery alien gangsters, and more than one surprise that will test their moral beliefs, the true nature of their partnership, and the implications of their existence within the galaxy.
               </p>
-              <Link href="/characters" className="neon-button text-lg">
-                the galaxy so far
-              </Link>
-            </div>
-            <div className="md:w-[45%] rounded-lg overflow-hidden">
-              {/* Using Reggie art as featured artwork */}
-              <div className="relative w-full h-auto" style={{ paddingBottom: '75%' }}>
-                <Image 
-                  src="/images/reggie.jpg" 
-                  alt="Bloodletter" 
-                  fill 
-                  className="object-contain"
-                  sizes="(max-width: 768px) 100vw, 45vw"
-                />
+              <div className="flex justify-center">
+                <Link href="/characters" className="neon-button text-lg">
+                  the galaxy so far
+                </Link>
               </div>
             </div>
           </div>
