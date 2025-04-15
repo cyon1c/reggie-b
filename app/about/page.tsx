@@ -12,7 +12,7 @@ export default function AboutPage() {
       <section className="relative pt-32 pb-16 bg-dark">
         <div className="absolute inset-0 opacity-20">
           <Image 
-            src="/images/reggie-close-up.jpg" 
+            src="/images/Banner 4.webp" 
             alt="Bloodletter background" 
             fill 
             className="object-cover object-center"
@@ -44,7 +44,7 @@ export default function AboutPage() {
             <div className="relative rounded-lg overflow-hidden neon-border">
               <div className="aspect-square">
                 <Image 
-                  src="/images/reggie-irl.jpg" 
+                  src="/images/reggie-irl_edited.jpg" 
                   alt="Brenton Peplinski" 
                   fill 
                   className="object-cover"
