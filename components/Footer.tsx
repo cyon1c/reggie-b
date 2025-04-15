@@ -43,6 +43,11 @@ export default function Footer() {
                 e.preventDefault();
                 const formData = new FormData(e.currentTarget);
                 const email = formData.get('email') as string;
+                
+                const submitButton = e.currentTarget.querySelector('button[type="submit"]') as HTMLButtonElement;
+                const originalButtonText = submitButton.innerText;
+                submitButton.innerText = 'Processing...';
+                submitButton.disabled = true;
 
                 try {
                   const response = await fetch('/api/newsletter', {
@@ -56,14 +61,20 @@ export default function Footer() {
                     }),
                   });
 
+                  const data = await response.json();
+                  
                   if (response.ok) {
-                    alert('Thank you for subscribing!');
+                    alert(data.message || 'Thank you for subscribing!');
                     e.currentTarget.reset();
                   } else {
-                    throw new Error('Failed to subscribe');
+                    throw new Error(data.error || 'Failed to subscribe');
                   }
                 } catch (error) {
-                  alert('Failed to subscribe. Please try again later.');
+                  const errorMessage = error instanceof Error ? error.message : 'Failed to subscribe. Please try again later.';
+                  alert(errorMessage);
+                } finally {
+                  submitButton.innerText = originalButtonText;
+                  submitButton.disabled = false;
                 }
               }}>
                 <input 
