@@ -32,8 +32,14 @@ export const metadata: Metadata = {
   title: 'BLOODLETTER HQ',
   description: 'Enter New Libertalia: Uncover the Truth, Survive the Chaos.',
   icons: {
-    icon: '/favicon.webp',
-    apple: '/favicon.webp',
+    icon: [
+      { url: '/favicon.webp', type: 'image/webp' },
+      { url: '/cataclysm-favicon.webp', type: 'image/webp' }
+    ],
+    apple: [
+      { url: '/cataclysm-favicon.webp', sizes: '180x180', type: 'image/webp' }
+    ],
+    shortcut: '/cataclysm-favicon.webp',
   },
 };
 
