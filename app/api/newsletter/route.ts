@@ -54,26 +54,42 @@ export async function POST(request: Request) {
     
     const url = `https://${API_SERVER}.api.mailchimp.com/3.0/lists/${AUDIENCE_ID}/members`;
     
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Basic ${Buffer.from(`anystring:${API_KEY}`).toString('base64')}`
-      },
-      body: JSON.stringify({
-        email_address: data.email,
-        status: 'subscribed', // or 'pending' if you want double opt-in
-        merge_fields: {
-          SOURCE: source,
-          // Add additional fields if provided
-          ...(data.name ? { FNAME: data.name } : {}),
-          ...(data.message ? { MESSAGE: data.message } : {})
-        },
-        tags: [tag]
-      })
-    });
+    console.log('Making Mailchimp API request to:', url);
     
-    const responseData = await response.json();
+    let response;
+    try {
+      response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Basic ${Buffer.from(`anystring:${API_KEY}`).toString('base64')}`
+        },
+        body: JSON.stringify({
+          email_address: data.email,
+          status: 'subscribed', // or 'pending' if you want double opt-in
+          merge_fields: {
+            SOURCE: source,
+            // Add additional fields if provided
+            ...(data.name ? { FNAME: data.name } : {}),
+            ...(data.message ? { MESSAGE: data.message } : {})
+          },
+          tags: [tag]
+        })
+      });
+    } catch (fetchError) {
+      console.error('Network error when contacting Mailchimp:', fetchError);
+      throw new Error(`Network error: ${fetchError instanceof Error ? fetchError.message : String(fetchError)}`);
+    }
+    
+    let responseData;
+    try {
+      responseData = await response.json();
+      console.log('Mailchimp API response:', response.status, response.statusText);
+      console.log('Response data:', JSON.stringify(responseData).substring(0, 200) + '...');
+    } catch (jsonError) {
+      console.error('Error parsing Mailchimp response:', jsonError);
+      throw new Error('Invalid response from Mailchimp API');
+    }
     
     // Check if the subscription was successful
     if (response.ok) {
@@ -125,8 +141,15 @@ export async function POST(request: Request) {
     }
   } catch (error) {
     console.error('Error processing subscription:', error);
+    let errorMessage = 'Failed to process subscription';
+    
+    if (error instanceof Error) {
+      errorMessage = error.message;
+      console.error('Error details:', error.stack);
+    }
+    
     return NextResponse.json(
-      { error: 'Failed to process subscription' },
+      { error: errorMessage },
       { status: 500 }
     );
   }
