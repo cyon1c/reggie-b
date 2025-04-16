@@ -14,22 +14,28 @@ export default function EmailSignupForm() {
     setError('');
 
     try {
-      const response = await fetch('/api/subscribe', {
+      const response = await fetch('/api/newsletter', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ 
+          email,
+          source: 'about_page_form'
+        }),
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to subscribe');
-      }
+      const result = await response.json();
 
-      setIsSubmitted(true);
-      setEmail('');
+      if (response.ok) {
+        setIsSubmitted(true);
+        setEmail('');
+      } else {
+        throw new Error(result.error || 'Failed to subscribe');
+      }
     } catch (err) {
-      setError('Something went wrong. Please try again.');
+      const errorMessage = err instanceof Error ? err.message : 'Something went wrong. Please try again.';
+      setError(errorMessage);
     } finally {
       setIsSubmitting(false);
     }
@@ -38,8 +44,8 @@ export default function EmailSignupForm() {
   if (isSubmitted) {
     return (
       <div className="text-center">
-        <p className="text-white text-xl mb-4">Thanks for subscribing!</p>
-        <p className="text-white/80">You'll receive updates about Bloodletter and exclusive content.</p>
+        <p className="text-white text-xl mb-4">Thanks for joining The Creative Process!</p>
+        <p className="text-white/80">You'll receive updates about Bloodletter and exclusive content from Brenton.</p>
       </div>
     );
   }

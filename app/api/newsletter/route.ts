@@ -33,8 +33,8 @@ export async function POST(request: Request) {
     let tag;
     const source = data.source || 'newsletter_footer';
     
-    if (source === 'contact_form') {
-      tag = 'The Creative Journey';
+    if (source === 'contact_form' || source === 'about_page_form') {
+      tag = 'The Creative Process';
     } else {
       tag = 'Citizen\'s Log';
     }
@@ -51,7 +51,7 @@ export async function POST(request: Request) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${API_KEY}`
+        'Authorization': `Basic ${Buffer.from(`anystring:${API_KEY}`).toString('base64')}`
       },
       body: JSON.stringify({
         email_address: data.email,
@@ -91,7 +91,7 @@ export async function POST(request: Request) {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
-              'Authorization': `Bearer ${API_KEY}`
+              'Authorization': `Basic ${Buffer.from(`anystring:${API_KEY}`).toString('base64')}`
             },
             body: JSON.stringify({
               tags: [{ name: tag, status: 'active' }]
