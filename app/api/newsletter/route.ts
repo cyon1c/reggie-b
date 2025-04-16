@@ -6,7 +6,7 @@ export async function POST(request: Request) {
     const data = await request.json();
     
     // Log the submission for debugging purposes
-    console.log('Newsletter subscription received:', data);
+    console.log('Subscription received:', data);
     
     if (!data.email) {
       return NextResponse.json(
@@ -18,15 +18,25 @@ export async function POST(request: Request) {
     // Mailchimp API configuration
     const API_KEY = process.env.MAILCHIMP_API_KEY;
     const AUDIENCE_ID = process.env.MAILCHIMP_AUDIENCE_ID;
-    const DATACENTER = process.env.MAILCHIMP_API_SERVER;
+    const API_SERVER = process.env.MAILCHIMP_API_SERVER;
     
     // Ensure environment variables are set
-    if (!API_KEY || !AUDIENCE_ID || !DATACENTER) {
+    if (!API_KEY || !AUDIENCE_ID || !API_SERVER) {
       console.error('Mailchimp environment variables not set');
       return NextResponse.json(
         { error: 'Configuration error' },
         { status: 500 }
       );
+    }
+    
+    // Determine which tag to use based on source
+    let tag;
+    const source = data.source || 'newsletter_footer';
+    
+    if (source === 'contact_form') {
+      tag = 'The Creative Journey';
+    } else {
+      tag = 'Citizen\'s Log';
     }
     
     // Create subscriber hash for the specific user (MD5 hash of the lowercase email)
@@ -35,7 +45,7 @@ export async function POST(request: Request) {
       .update(data.email.toLowerCase())
       .digest('hex');
     
-    const url = `https://${DATACENTER}.api.mailchimp.com/3.0/lists/${AUDIENCE_ID}/members`;
+    const url = `https://${API_SERVER}.api.mailchimp.com/3.0/lists/${AUDIENCE_ID}/members`;
     
     const response = await fetch(url, {
       method: 'POST',
@@ -47,8 +57,12 @@ export async function POST(request: Request) {
         email_address: data.email,
         status: 'subscribed', // or 'pending' if you want double opt-in
         merge_fields: {
-          SOURCE: data.source || 'website_footer'
-        }
+          SOURCE: source,
+          // Add additional fields if provided
+          ...(data.name ? { FNAME: data.name } : {}),
+          ...(data.message ? { MESSAGE: data.message } : {})
+        },
+        tags: [tag]
       })
     });
     
@@ -56,13 +70,44 @@ export async function POST(request: Request) {
     
     // Check if the subscription was successful
     if (response.ok) {
+      let successMessage = '';
+      if (tag === 'Citizen\'s Log') {
+        successMessage = 'Thank you for subscribing to Citizen\'s Log!';
+      } else {
+        successMessage = 'Thank you for joining our Creative Journey!';
+      }
+      
       return NextResponse.json({ 
         success: true,
-        message: 'You have been successfully subscribed to the newsletter!'
+        message: successMessage
       });
     } else {
       // Handle Mailchimp error, including duplicate subscriber
       if (responseData.title === 'Member Exists') {
+        // Update tags for existing member
+        try {
+          const updateUrl = `https://${API_SERVER}.api.mailchimp.com/3.0/lists/${AUDIENCE_ID}/members/${emailHash}/tags`;
+          const updateResponse = await fetch(updateUrl, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${API_KEY}`
+            },
+            body: JSON.stringify({
+              tags: [{ name: tag, status: 'active' }]
+            })
+          });
+          
+          if (updateResponse.ok) {
+            return NextResponse.json({ 
+              success: true,
+              message: 'Your subscription preferences have been updated. Thank you!'
+            });
+          }
+        } catch (updateError) {
+          console.error('Error updating existing member tags:', updateError);
+        }
+        
         return NextResponse.json({ 
           success: true,
           message: 'You are already subscribed to our newsletter!'
@@ -72,7 +117,7 @@ export async function POST(request: Request) {
       throw new Error(responseData.detail || 'Failed to subscribe');
     }
   } catch (error) {
-    console.error('Error processing newsletter subscription:', error);
+    console.error('Error processing subscription:', error);
     return NextResponse.json(
       { error: 'Failed to process subscription' },
       { status: 500 }
