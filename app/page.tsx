@@ -14,22 +14,23 @@ export default function Home() {
       <section className="relative flex items-center justify-center overflow-hidden pb-16 pt-32 min-h-[90vh]">
         {/* Hero background image */}
         <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/60 to-darker z-10"></div>
-          <div className="relative w-full h-[50vh] md:h-[70vh] lg:h-[80vh] overflow-hidden">
-            {/* Using comic intro art as hero background */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/60 to-darker z-10"></div>
+          <div className="relative w-full h-screen overflow-hidden">
+            {/* Hero banner image */}
             <Image 
-              src="/images/Page11x12 Final.webp" 
-              alt="Bloodletter Comic Spread" 
+              src="/images/Homepage Banner.webp" 
+              alt="Bloodletter Hero Banner" 
               fill 
-              className="object-cover object-center opacity-95"
+              className="object-cover object-top opacity-90"
               priority
               sizes="100vw"
+              quality={90}
             />
           </div>
         </div>
         
-        <div className="relative z-20 text-center max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
-          <p className="text-2xl md:text-3xl font-title text-white mb-12 max-w-3xl mx-auto leading-relaxed pt-16">
+        <div className="relative z-20 text-center max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 mt-16">
+          <p className="text-2xl md:text-3xl font-title text-white mb-12 max-w-3xl mx-auto leading-relaxed drop-shadow-lg">
             Invisible spaceships, psychopath alien mercenaries, corrupt genocidal politicians, and giant, evil space snakes. What else is new when you're the intergalactic bounty hunter known as-
           </p>
           <div className="mx-auto w-full max-w-2xl mb-12">
@@ -91,14 +92,14 @@ export default function Home() {
         </div>
       </section>
       
-      {/* Featured Art Carousel (Placeholder) */}
+      {/* Featured Art Carousel (Placeholder) - Temporarily hidden */}
+      {/* 
       <section className="py-24 bg-darker">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-7xl font-display mb-20 text-white text-center leading-none">
             <span className="outlined-text">FACTION</span> PROFILES
           </h2>
           
-          {/* This would be replaced with a proper carousel component */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
             <div className="cyberpunk-card">
               <div className="aspect-[3/4] bg-black/40 mb-6 relative overflow-hidden">
@@ -156,6 +157,7 @@ export default function Home() {
           </div>
         </div>
       </section>
+      */}
       
       {/* Citizen's Unite Section */}
       <section className="py-24 bg-dark">
