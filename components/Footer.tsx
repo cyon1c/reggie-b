@@ -2,9 +2,13 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import { useState } from 'react';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
+  const [isSubscribing, setIsSubscribing] = useState(false);
+  const [subscriptionSuccess, setSubscriptionSuccess] = useState(false);
+  const [subscriptionError, setSubscriptionError] = useState('');
   
   return (
     <footer className="bg-dark pt-20 pb-10">
@@ -39,47 +43,68 @@ export default function Footer() {
           <div>
             <h3 className="font-display text-2xl text-white mb-8 tracking-wide uppercase">Citizen's Log</h3>
             <div className="w-full max-w-md">
-              <form className="flex flex-col gap-4" onSubmit={async (e) => {
-                e.preventDefault();
-                const formData = new FormData(e.currentTarget);
-                const email = formData.get('email') as string;
+              {subscriptionSuccess ? (
+                <div className="text-center">
+                  <p className="text-white text-xl mb-4">Thanks for subscribing to Citizen's Log!</p>
+                  <p className="text-white/80">You're now connected to our network of intel on New Libertalia.</p>
+                </div>
+              ) : (
+                <form className="flex flex-col gap-4" onSubmit={async (e) => {
+                  e.preventDefault();
+                  setIsSubscribing(true);
+                  setSubscriptionError('');
+                  
+                  const formData = new FormData(e.currentTarget);
+                  const email = formData.get('email') as string;
 
-                try {
-                  const response = await fetch('/api/newsletter', {
-                    method: 'POST',
-                    headers: {
-                      'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ 
-                      email,
-                      source: 'newsletter_footer'
-                    }),
-                  });
+                  try {
+                    const response = await fetch('/api/newsletter', {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify({ 
+                        email,
+                        source: 'newsletter_footer'
+                      }),
+                    });
 
-                  if (response.ok) {
-                    alert('Thank you for subscribing!');
-                    e.currentTarget.reset();
-                  } else {
-                    throw new Error('Failed to subscribe');
+                    const data = await response.json();
+                    
+                    if (response.ok) {
+                      setSubscriptionSuccess(true);
+                    } else {
+                      throw new Error(data.error || 'Failed to subscribe');
+                    }
+                  } catch (error) {
+                    const errorMessage = error instanceof Error ? error.message : 'Failed to subscribe. Please try again later.';
+                    setSubscriptionError(errorMessage);
+                  } finally {
+                    setIsSubscribing(false);
                   }
-                } catch (error) {
-                  alert('Failed to subscribe. Please try again later.');
-                }
-              }}>
-                <input 
-                  type="email" 
-                  placeholder="Enter your contact frequency" 
-                  className="w-full px-6 py-4 bg-gray/20 text-white border border-gray/30 rounded-none focus:outline-none focus:ring-2 focus:ring-primary text-lg"
-                  name="email"
-                  required
-                />
-                <button 
-                  type="submit" 
-                  className="w-full md:w-auto neon-button text-lg"
-                >
-                  Stay Informed
-                </button>
-              </form>
+                }}>
+                  <input 
+                    type="email" 
+                    placeholder="Enter your contact frequency" 
+                    className="w-full px-6 py-4 bg-gray/20 text-white border border-gray/30 rounded-none focus:outline-none focus:ring-2 focus:ring-primary text-lg"
+                    name="email"
+                    required
+                  />
+                  <button 
+                    type="submit" 
+                    className="w-full md:w-auto neon-button text-lg"
+                    disabled={isSubscribing}
+                  >
+                    {isSubscribing ? 'Processing...' : 'Stay Informed'}
+                  </button>
+                  
+                  {subscriptionError && (
+                    <div className="bg-red-900/50 text-white p-4 text-center">
+                      {subscriptionError}
+                    </div>
+                  )}
+                </form>
+              )}
             </div>
           </div>
           
@@ -115,7 +140,7 @@ export default function Footer() {
         {/* Copyright */}
         <div className="border-t border-gray/20 pt-10">
           <p className="text-center text-gray text-lg font-title">
-            © 2025 Cataclysm Studios
+            © {currentYear} Cataclysm Studios
           </p>
         </div>
       </div>
