@@ -100,9 +100,7 @@ export default function Footer() {
                   
                   {subscriptionError && (
                     <div className="bg-red-900/50 text-white p-4 text-center">
-                      {subscriptionError.includes("fake or invalid") 
-                        ? "Please enter a valid email address." 
-                        : subscriptionError}
+                      {subscriptionError}
                     </div>
                   )}
                 </form>
@@ -131,7 +129,7 @@ export default function Footer() {
         {/* Cataclysm Logo */}
         <div className="flex justify-center mb-0">
           <Image 
-            src="/images/cataclysm-logo.webp" 
+            src="/images/Cataclysm Logo.webp" 
             alt="Cataclysm Logo" 
             width={120}
             height={60}

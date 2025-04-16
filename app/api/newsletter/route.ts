@@ -20,13 +20,6 @@ export async function POST(request: Request) {
     const AUDIENCE_ID = process.env.MAILCHIMP_AUDIENCE_ID;
     const API_SERVER = process.env.MAILCHIMP_API_SERVER;
     
-    // Debug logging
-    console.log('Mailchimp Config Check:');
-    console.log('API_KEY exists:', !!API_KEY);
-    console.log('AUDIENCE_ID exists:', !!AUDIENCE_ID);
-    console.log('API_SERVER exists:', !!API_SERVER);
-    console.log('API_SERVER value:', API_SERVER);
-    
     // Ensure environment variables are set
     if (!API_KEY || !AUDIENCE_ID || !API_SERVER) {
       console.error('Mailchimp environment variables not set');
@@ -54,42 +47,26 @@ export async function POST(request: Request) {
     
     const url = `https://${API_SERVER}.api.mailchimp.com/3.0/lists/${AUDIENCE_ID}/members`;
     
-    console.log('Making Mailchimp API request to:', url);
-    
-    let response;
-    try {
-      response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Basic ${Buffer.from(`anystring:${API_KEY}`).toString('base64')}`
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Basic ${Buffer.from(`anystring:${API_KEY}`).toString('base64')}`
+      },
+      body: JSON.stringify({
+        email_address: data.email,
+        status: 'subscribed', // or 'pending' if you want double opt-in
+        merge_fields: {
+          SOURCE: source,
+          // Add additional fields if provided
+          ...(data.name ? { FNAME: data.name } : {}),
+          ...(data.message ? { MESSAGE: data.message } : {})
         },
-        body: JSON.stringify({
-          email_address: data.email,
-          status: 'subscribed', // or 'pending' if you want double opt-in
-          merge_fields: {
-            SOURCE: source,
-            // Add additional fields if provided
-            ...(data.name ? { FNAME: data.name } : {}),
-            ...(data.message ? { MESSAGE: data.message } : {})
-          },
-          tags: [tag]
-        })
-      });
-    } catch (fetchError) {
-      console.error('Network error when contacting Mailchimp:', fetchError);
-      throw new Error(`Network error: ${fetchError instanceof Error ? fetchError.message : String(fetchError)}`);
-    }
+        tags: [tag]
+      })
+    });
     
-    let responseData;
-    try {
-      responseData = await response.json();
-      console.log('Mailchimp API response:', response.status, response.statusText);
-      console.log('Response data:', JSON.stringify(responseData).substring(0, 200) + '...');
-    } catch (jsonError) {
-      console.error('Error parsing Mailchimp response:', jsonError);
-      throw new Error('Invalid response from Mailchimp API');
-    }
+    const responseData = await response.json();
     
     // Check if the subscription was successful
     if (response.ok) {
@@ -137,26 +114,12 @@ export async function POST(request: Request) {
         });
       }
       
-      // Handle validation errors from Mailchimp
-      if (responseData.title === 'Invalid Resource' && responseData.detail) {
-        return NextResponse.json({ 
-          error: responseData.detail
-        }, { status: 400 });
-      }
-      
       throw new Error(responseData.detail || 'Failed to subscribe');
     }
   } catch (error) {
     console.error('Error processing subscription:', error);
-    let errorMessage = 'Failed to process subscription';
-    
-    if (error instanceof Error) {
-      errorMessage = error.message;
-      console.error('Error details:', error.stack);
-    }
-    
     return NextResponse.json(
-      { error: errorMessage },
+      { error: 'Failed to process subscription' },
       { status: 500 }
     );
   }
