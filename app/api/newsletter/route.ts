@@ -137,6 +137,13 @@ export async function POST(request: Request) {
         });
       }
       
+      // Handle validation errors from Mailchimp
+      if (responseData.title === 'Invalid Resource' && responseData.detail) {
+        return NextResponse.json({ 
+          error: responseData.detail
+        }, { status: 400 });
+      }
+      
       throw new Error(responseData.detail || 'Failed to subscribe');
     }
   } catch (error) {

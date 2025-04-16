@@ -70,7 +70,11 @@ export default function EmailSignupForm() {
         </button>
       </div>
       {error && (
-        <p className="text-red-500 mt-2 text-center">{error}</p>
+        <p className="text-red-500 mt-2 text-center">
+          {error.includes("fake or invalid") 
+            ? "Please enter a valid email address." 
+            : error}
+        </p>
       )}
     </form>
   );
