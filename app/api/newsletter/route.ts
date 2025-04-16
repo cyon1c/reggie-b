@@ -20,6 +20,13 @@ export async function POST(request: Request) {
     const AUDIENCE_ID = process.env.MAILCHIMP_AUDIENCE_ID;
     const API_SERVER = process.env.MAILCHIMP_API_SERVER;
     
+    // Debug logging
+    console.log('Mailchimp Config Check:');
+    console.log('API_KEY exists:', !!API_KEY);
+    console.log('AUDIENCE_ID exists:', !!AUDIENCE_ID);
+    console.log('API_SERVER exists:', !!API_SERVER);
+    console.log('API_SERVER value:', API_SERVER);
+    
     // Ensure environment variables are set
     if (!API_KEY || !AUDIENCE_ID || !API_SERVER) {
       console.error('Mailchimp environment variables not set');
