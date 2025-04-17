@@ -4,12 +4,22 @@ import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import ErrorBoundary from '@/components/ErrorBoundary';
 
+// Log startup information
+console.log('[ComicReader] Component initializing', {
+  userAgent: typeof navigator !== 'undefined' ? navigator.userAgent : 'SSR',
+  timestamp: new Date().toISOString()
+});
+
 // Global error handler for image loading issues
 // This will help debug iOS Chrome specific issues
 if (typeof window !== 'undefined') {
+  console.log('[ComicReader] Setting up global error handlers');
+  
   // Enhanced error logging
   const originalConsoleError = console.error;
   console.error = function(...args) {
+    console.log('[ComicReader] Console error intercepted:', ...args);
+    
     // Store in localStorage for later retrieval
     try {
       const logs = JSON.parse(localStorage.getItem('console_error_logs') || '[]');
@@ -41,8 +51,11 @@ if (typeof window !== 'undefined') {
         }),
         // Use keepalive to ensure the request completes even if page is unloading
         keepalive: true
-      }).catch(e => {}); // Silent catch - don't cause more errors if this fails
+      }).catch(e => {
+        console.log('[ComicReader] Failed to send error to API:', e);
+      }); // Silent catch - don't cause more errors if this fails
     } catch (e) {
+      console.log('[ComicReader] Error in error handling:', e);
       // If we can't log, at least try to continue
     }
     
@@ -52,8 +65,20 @@ if (typeof window !== 'undefined') {
 
   // General unhandled error capture
   window.addEventListener('error', function(e) {
+    console.log('[ComicReader] Global error event captured:', {
+      message: e.message,
+      filename: e.filename,
+      lineNumber: e.lineno,
+      columnNumber: e.colno
+    });
+    
     if (e.target && (e.target as HTMLElement).tagName === 'IMG') {
-      console.error('Image loading error:', e);
+      console.log('[ComicReader] Image loading error:', {
+        src: (e.target as HTMLImageElement).src,
+        alt: (e.target as HTMLImageElement).alt,
+        width: (e.target as HTMLImageElement).width,
+        height: (e.target as HTMLImageElement).height
+      });
       // Prevent the error from crashing the app
       e.preventDefault();
     } else {
@@ -71,6 +96,7 @@ if (typeof window !== 'undefined') {
   
   // Promise rejection handler
   window.addEventListener('unhandledrejection', function(e) {
+    console.log('[ComicReader] Unhandled promise rejection:', e.reason);
     console.error('Unhandled promise rejection:', {
       reason: e.reason ? (e.reason.stack || e.reason.toString()) : 'No reason provided',
       type: 'promise'
@@ -133,6 +159,8 @@ const COMIC_PAGES = [
 ];
 
 const ComicReader = () => {
+  console.log('[ComicReader] Rendering ComicReader component');
+
   const [currentPage, setCurrentPage] = useState(0);
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -228,6 +256,7 @@ const ComicReader = () => {
 
   // Handle page load
   const handlePageLoad = (pageIndex: number) => {
+    console.log(`[ComicReader] Page ${pageIndex} loaded`);
     setLoadedPages(prev => new Set(prev).add(pageIndex));
     setLoadingPages(prev => {
       const next = new Set(prev);
@@ -238,6 +267,7 @@ const ComicReader = () => {
 
   // Handle page load start
   const handlePageLoadStart = (pageIndex: number) => {
+    console.log(`[ComicReader] Page ${pageIndex} load started`);
     setLoadingPages(prev => new Set(prev).add(pageIndex));
   };
 
@@ -400,6 +430,7 @@ const ComicReader = () => {
   }, [isFullscreen, isSpreadView, currentPage]); // Recalculate when relevant states change
 
   const goToNextPage = () => {
+    console.log('[ComicReader] Going to next page from:', currentPage);
     if (currentPage < totalPageFiles - 1) {
       if (isSpreadView) {
         // Special handling for the combined page and surrounding pages
@@ -422,6 +453,7 @@ const ComicReader = () => {
   };
 
   const goToPrevPage = () => {
+    console.log('[ComicReader] Going to previous page from:', currentPage);
     if (currentPage > 0) {
       if (isSpreadView) {
         // Special handling for the combined page and surrounding pages
@@ -492,6 +524,12 @@ const ComicReader = () => {
 
   // Function to safely render Image components
   const safeRenderImage = (pageIndex: number, i: number, isDoublePage: boolean, isVisible: boolean, isLoaded: boolean) => {
+    console.log(`[ComicReader] Rendering image for page ${pageIndex}`, {
+      isDoublePage,
+      isVisible,
+      isLoaded
+    });
+    
     try {
       return isVisible ? (
         <Image
@@ -502,22 +540,71 @@ const ComicReader = () => {
           priority={i === 0} // Only prioritize the first visible page
           sizes={pagesToShow.length > 1 || isDoublePage ? (isDoublePage ? "100vw" : "50vw") : "100vw"}
           quality={80}
-          onLoad={() => handlePageLoad(pageIndex)}
-          onLoadStart={() => handlePageLoadStart(pageIndex)}
+          onLoad={() => {
+            console.log(`[ComicReader] Image loaded for page ${pageIndex}`);
+            handlePageLoad(pageIndex);
+          }}
+          onLoadStart={() => {
+            console.log(`[ComicReader] Image load started for page ${pageIndex}`);
+            handlePageLoadStart(pageIndex);
+          }}
           loading={i === 0 ? "eager" : "lazy"}
           unoptimized
           onError={(e) => {
+            console.log(`[ComicReader] Image loading error for page ${pageIndex}:`, e);
             console.error(`Error loading image for page ${pageIndex}:`, e);
             setRenderError(`Failed to load page ${pageIndex}`);
           }}
         />
       ) : null;
     } catch (error) {
+      console.log(`[ComicReader] Error in safeRenderImage for page ${pageIndex}:`, error);
       console.error(`Error rendering image for page ${pageIndex}:`, error);
       setRenderError(`Failed to render page ${pageIndex}`);
       return <div className="w-full h-full flex items-center justify-center bg-black text-primary">Error loading image</div>;
     }
   };
+
+  // Add useEffect for component lifecycle logging
+  useEffect(() => {
+    console.log('[ComicReader] Component mounted');
+    
+    return () => {
+      console.log('[ComicReader] Component unmounting');
+    };
+  }, []);
+
+  // Log state updates
+  useEffect(() => {
+    console.log('[ComicReader] Current page updated:', currentPage);
+  }, [currentPage]);
+
+  useEffect(() => {
+    console.log('[ComicReader] Spread view updated:', isSpreadView);
+  }, [isSpreadView]);
+
+  useEffect(() => {
+    console.log('[ComicReader] Fullscreen updated:', isFullscreen);
+  }, [isFullscreen]);
+
+  useEffect(() => {
+    console.log('[ComicReader] Dimensions updated:', dimensions);
+  }, [dimensions]);
+
+  // Log page calculations
+  useEffect(() => {
+    const pages = getCurrentPages();
+    console.log('[ComicReader] Current pages to display:', pages);
+  }, [currentPage, isSpreadView]);
+
+  // Log loading states
+  useEffect(() => {
+    console.log('[ComicReader] Loading pages:', Array.from(loadingPages));
+  }, [loadingPages]);
+
+  useEffect(() => {
+    console.log('[ComicReader] Loaded pages:', Array.from(loadedPages));
+  }, [loadedPages]);
 
   return (
     <>
@@ -833,7 +920,10 @@ const ComicReader = () => {
 
 // Wrap the exported component with ErrorBoundary
 const ComicReaderWithErrorBoundary = () => {
+  console.log('[ComicReader] Rendering ComicReaderWithErrorBoundary');
+  
   const handleError = (error: Error, errorInfo: React.ErrorInfo) => {
+    console.log('[ComicReader] ErrorBoundary caught error:', error.message);
     console.error('ComicReader error:', error, errorInfo);
     
     // Additional iOS Chrome specific logging
@@ -842,6 +932,7 @@ const ComicReaderWithErrorBoundary = () => {
     if (typeof navigator !== 'undefined' && 
         navigator.userAgent.includes('CriOS') && 
         /iPhone|iPad|iPod/.test(navigator.userAgent)) {
+      console.log('[ComicReader] iOS Chrome detected, collecting additional info');
       Object.assign(extraData, {
         isiOSChrome: true,
         memory: (performance as any).memory ? {
@@ -855,6 +946,7 @@ const ComicReaderWithErrorBoundary = () => {
     }
     
     // Send detailed error to server
+    console.log('[ComicReader] Sending error to server API');
     fetch('/api/log-error', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -872,7 +964,9 @@ const ComicReaderWithErrorBoundary = () => {
         time: new Date().toISOString()
       }),
       keepalive: true
-    }).catch(e => {}); // Silent catch
+    }).catch(e => {
+      console.log('[ComicReader] Failed to send error boundary data to API:', e);
+    }); // Silent catch
   };
 
   return (
