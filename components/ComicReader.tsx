@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
-import ErrorBoundary from './ErrorBoundary';
+import ErrorBoundary from '@/components/ErrorBoundary';
 
 // Global error handler for image loading issues
 // This will help debug iOS Chrome specific issues
