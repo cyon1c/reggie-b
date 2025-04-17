@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
+import { Analytics } from '@vercel/analytics/react';
 
 // Define the comic pages - now using Vercel storage URLs
 //DO NOT CHANGE. THIS IS THE CORRECT BASE URL.
@@ -412,6 +413,7 @@ const ComicReader = () => {
   }, [showLegend]);
 
   return (
+    <>
     <div className="comic-reader" ref={containerRef}>
       <div 
         ref={readerRef} 
@@ -717,6 +719,8 @@ const ComicReader = () => {
         )}
       </div>
     </div>
+    <Analytics />
+    </>
   );
 };
 
