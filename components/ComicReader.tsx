@@ -161,10 +161,43 @@ const COMIC_PAGES = [
 const ComicReader = () => {
   console.log('[ComicReader] Rendering ComicReader component');
 
-  const [currentPage, setCurrentPage] = useState(0);
+  // Use localStorage to persist the current page
+  const [currentPage, setCurrentPage] = useState(() => {
+    // Check if localStorage is available (avoid SSR issues)
+    if (typeof window !== 'undefined') {
+      // Try to get saved page from localStorage
+      const savedPage = localStorage.getItem('comicReaderCurrentPage');
+      // Parse the saved value or use 0 if none exists
+      return savedPage ? parseInt(savedPage, 10) : 0;
+    }
+    return 0; // Default for SSR
+  });
+  
+  // Update localStorage when current page changes
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('comicReaderCurrentPage', currentPage.toString());
+    }
+  }, [currentPage]);
+
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [isSpreadView, setIsSpreadView] = useState(false);
+  
+  // Also persist spread view preference
+  const [isSpreadView, setIsSpreadView] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('comicReaderSpreadView') === 'true';
+    }
+    return false;
+  });
+  
+  // Update localStorage when spread view changes
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('comicReaderSpreadView', isSpreadView.toString());
+    }
+  }, [isSpreadView]);
+  
   const [isLoading, setIsLoading] = useState(true);
   const [visiblePages, setVisiblePages] = useState<number[]>([]);
   const [showLegend, setShowLegend] = useState(false);
@@ -634,6 +667,16 @@ const ComicReader = () => {
     console.log('[ComicReader] Loaded pages:', Array.from(loadedPages));
   }, [loadedPages]);
 
+  // Add function to reset reader progress
+  const resetProgress = () => {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('comicReaderCurrentPage');
+      localStorage.removeItem('comicReaderSpreadView');
+      setCurrentPage(0);
+      setIsSpreadView(false);
+    }
+  };
+
   return (
     <>
     <div className="comic-reader" ref={containerRef}>
@@ -779,6 +822,21 @@ const ComicReader = () => {
               
               <div className="border-t border-gray-700 pt-2 text-xs text-gray-400">
                 Click anywhere on the left/right side of the comic to navigate between pages.
+              </div>
+              
+              {/* Add reset button */}
+              <div className="border-t border-gray-700 pt-3">
+                <p className="font-semibold mb-2">Reading Progress:</p>
+                <div className="flex justify-between items-center">
+                  <span>Your progress is saved automatically</span>
+                  <button 
+                    onClick={resetProgress}
+                    className="px-2 py-1 bg-red-800 hover:bg-red-700 text-white text-xs rounded"
+                    title="Reset reading progress"
+                  >
+                    Reset
+                  </button>
+                </div>
               </div>
             </div>
           </div>
