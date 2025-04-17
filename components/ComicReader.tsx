@@ -2,17 +2,81 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
+import ErrorBoundary from './ErrorBoundary';
 
 // Global error handler for image loading issues
 // This will help debug iOS Chrome specific issues
 if (typeof window !== 'undefined') {
+  // Enhanced error logging
+  const originalConsoleError = console.error;
+  console.error = function(...args) {
+    // Store in localStorage for later retrieval
+    try {
+      const logs = JSON.parse(localStorage.getItem('console_error_logs') || '[]');
+      const errorLog = {
+        error: args.map(arg => 
+          typeof arg === 'object' ? JSON.stringify(arg, Object.getOwnPropertyNames(arg)) : String(arg)
+        ),
+        userAgent: navigator.userAgent,
+        timestamp: new Date().toISOString()
+      };
+      
+      logs.push(errorLog);
+      // Keep only last 20 errors to avoid storage issues
+      if (logs.length > 20) logs.shift();
+      localStorage.setItem('console_error_logs', JSON.stringify(logs));
+      
+      // Send to our API endpoint
+      fetch('/api/log-error', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'console_error',
+          data: errorLog,
+          page: window.location.pathname,
+          screen: {
+            width: window.innerWidth,
+            height: window.innerHeight
+          }
+        }),
+        // Use keepalive to ensure the request completes even if page is unloading
+        keepalive: true
+      }).catch(e => {}); // Silent catch - don't cause more errors if this fails
+    } catch (e) {
+      // If we can't log, at least try to continue
+    }
+    
+    // Call the original console.error
+    originalConsoleError.apply(console, args);
+  };
+
+  // General unhandled error capture
   window.addEventListener('error', function(e) {
     if (e.target && (e.target as HTMLElement).tagName === 'IMG') {
       console.error('Image loading error:', e);
       // Prevent the error from crashing the app
       e.preventDefault();
+    } else {
+      // Capture other JS errors
+      console.error('Unhandled error:', {
+        message: e.message,
+        filename: e.filename,
+        lineno: e.lineno,
+        colno: e.colno,
+        error: e.error ? (e.error.stack || e.error.toString()) : 'No error object',
+        type: 'unhandled'
+      });
     }
   }, true);
+  
+  // Promise rejection handler
+  window.addEventListener('unhandledrejection', function(e) {
+    console.error('Unhandled promise rejection:', {
+      reason: e.reason ? (e.reason.stack || e.reason.toString()) : 'No reason provided',
+      type: 'promise'
+    });
+    // Don't prevent default to allow normal handling
+  });
 }
 
 // Define the comic pages - now using Vercel storage URLs
@@ -767,4 +831,66 @@ const ComicReader = () => {
   );
 };
 
-export default ComicReader; 
+// Wrap the exported component with ErrorBoundary
+const ComicReaderWithErrorBoundary = () => {
+  const handleError = (error: Error, errorInfo: React.ErrorInfo) => {
+    console.error('ComicReader error:', error, errorInfo);
+    
+    // Additional iOS Chrome specific logging
+    const extraData = {};
+    
+    if (typeof navigator !== 'undefined' && 
+        navigator.userAgent.includes('CriOS') && 
+        /iPhone|iPad|iPod/.test(navigator.userAgent)) {
+      Object.assign(extraData, {
+        isiOSChrome: true,
+        memory: (performance as any).memory ? {
+          jsHeapSizeLimit: (performance as any).memory.jsHeapSizeLimit,
+          totalJSHeapSize: (performance as any).memory.totalJSHeapSize,
+          usedJSHeapSize: (performance as any).memory.usedJSHeapSize,
+        } : 'Not available',
+        windowSize: `${window.innerWidth}x${window.innerHeight}`,
+        devicePixelRatio: window.devicePixelRatio,
+      });
+    }
+    
+    // Send detailed error to server
+    fetch('/api/log-error', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        type: 'error_boundary',
+        error: {
+          name: error.name,
+          message: error.message,
+          stack: error.stack
+        },
+        componentStack: errorInfo.componentStack,
+        userAgent: navigator.userAgent,
+        extraData,
+        page: window.location.pathname,
+        time: new Date().toISOString()
+      }),
+      keepalive: true
+    }).catch(e => {}); // Silent catch
+  };
+
+  return (
+    <ErrorBoundary 
+      onError={handleError}
+      fallback={
+        <div className="p-5 bg-darker text-white m-4 rounded-lg shadow-lg">
+          <h2 className="text-2xl text-primary mb-4">Comic Reader Error</h2>
+          <p className="mb-3">We encountered a problem loading the comic reader.</p>
+          <p className="mb-3">This issue has been logged for our team to investigate.</p>
+          <p className="text-sm mb-4">If you're using iOS Chrome, please try Safari which has better compatibility.</p>
+          <a href="/" className="px-4 py-2 bg-primary text-black rounded inline-block">Return to Homepage</a>
+        </div>
+      }
+    >
+      <ComicReader />
+    </ErrorBoundary>
+  );
+};
+
+export default ComicReaderWithErrorBoundary; 
