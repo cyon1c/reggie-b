@@ -2,7 +2,18 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
-import { Analytics } from '@vercel/analytics/react';
+
+// Global error handler for image loading issues
+// This will help debug iOS Chrome specific issues
+if (typeof window !== 'undefined') {
+  window.addEventListener('error', function(e) {
+    if (e.target && (e.target as HTMLElement).tagName === 'IMG') {
+      console.error('Image loading error:', e);
+      // Prevent the error from crashing the app
+      e.preventDefault();
+    }
+  }, true);
+}
 
 // Define the comic pages - now using Vercel storage URLs
 //DO NOT CHANGE. THIS IS THE CORRECT BASE URL.
@@ -71,6 +82,9 @@ const ComicReader = () => {
   const totalPageFiles = COMIC_PAGES.length;
   // The actual page count is 44 (43 files + 1 extra from the double-page spread)
   const actualPageCount = 44;
+
+  // Add error state to track rendering issues
+  const [renderError, setRenderError] = useState<string | null>(null);
 
   // Get current displayed pages based on view mode
   const getCurrentPages = () => {
@@ -412,6 +426,35 @@ const ComicReader = () => {
     };
   }, [showLegend]);
 
+  // Function to safely render Image components
+  const safeRenderImage = (pageIndex: number, i: number, isDoublePage: boolean, isVisible: boolean, isLoaded: boolean) => {
+    try {
+      return isVisible ? (
+        <Image
+          src={COMIC_PAGES[pageIndex].src}
+          alt={COMIC_PAGES[pageIndex].alt}
+          fill
+          className={`object-contain ${isDoublePage ? 'object-fit-contain' : ''} transition-opacity duration-300 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
+          priority={i === 0} // Only prioritize the first visible page
+          sizes={pagesToShow.length > 1 || isDoublePage ? (isDoublePage ? "100vw" : "50vw") : "100vw"}
+          quality={80}
+          onLoad={() => handlePageLoad(pageIndex)}
+          onLoadStart={() => handlePageLoadStart(pageIndex)}
+          loading={i === 0 ? "eager" : "lazy"}
+          unoptimized
+          onError={(e) => {
+            console.error(`Error loading image for page ${pageIndex}:`, e);
+            setRenderError(`Failed to load page ${pageIndex}`);
+          }}
+        />
+      ) : null;
+    } catch (error) {
+      console.error(`Error rendering image for page ${pageIndex}:`, error);
+      setRenderError(`Failed to render page ${pageIndex}`);
+      return <div className="w-full h-full flex items-center justify-center bg-black text-primary">Error loading image</div>;
+    }
+  };
+
   return (
     <>
     <div className="comic-reader" ref={containerRef}>
@@ -592,24 +635,25 @@ const ComicReader = () => {
                            (isDoublePage ? '100%' : '50%') : '100%'
                 }}
               >
-                  {isVisible && (
-                <Image
-                  src={COMIC_PAGES[pageIndex].src}
-                  alt={COMIC_PAGES[pageIndex].alt}
-                  fill
-                      className={`object-contain ${isDoublePage ? 'object-fit-contain' : ''} transition-opacity duration-300 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
-                      priority={i === 0} // Only prioritize the first visible page
-                      sizes={pagesToShow.length > 1 || isDoublePage ? (isDoublePage ? "100vw" : "50vw") : "100vw"}
-                      quality={80}
-                      onLoad={() => handlePageLoad(pageIndex)}
-                      onLoadStart={() => handlePageLoadStart(pageIndex)}
-                      loading={i === 0 ? "eager" : "lazy"}
-                      unoptimized
-                    />
-                  )}
+                {safeRenderImage(pageIndex, i, isDoublePage, isVisible, isLoaded)}
               </div>
               );
             })}
+            
+            {/* Display any render errors */}
+            {renderError && (
+              <div className="absolute inset-0 flex items-center justify-center z-30 bg-black/90 text-primary">
+                <div className="p-4 bg-darker rounded-lg">
+                  <p className="mb-2">Error: {renderError}</p>
+                  <button 
+                    onClick={() => setRenderError(null)} 
+                    className="px-3 py-1 bg-primary text-black rounded hover:bg-primary/80"
+                  >
+                    Dismiss
+                  </button>
+                </div>
+              </div>
+            )}
             
             {/* Navigation Controls */}
             <div className="absolute inset-0 flex items-center justify-between px-4 z-10">
@@ -719,7 +763,6 @@ const ComicReader = () => {
         )}
       </div>
     </div>
-    <Analytics />
     </>
   );
 };

@@ -1,6 +1,7 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import { Space_Grotesk, Orbitron, Bebas_Neue, VT323 } from 'next/font/google';
+import { Analytics } from '@vercel/analytics/react';
 
 const spaceGrotesk = Space_Grotesk({ 
   subsets: ['latin'],
@@ -52,6 +53,7 @@ export default function RootLayout({
     <html lang="en" className={`${spaceGrotesk.variable} ${orbitron.variable} ${bebas.variable} ${vt323.variable}`}>
       <body className="bg-darker">
         {children}
+        <Analytics />
       </body>
     </html>
   );
