@@ -273,77 +273,137 @@ const ComicReader = () => {
 
   // Calculate optimal dimensions based on viewport and container
   const calculateDimensions = () => {
-    if (!containerRef.current) return;
-
-    // Get available space (accounting for padding and other elements)
-    const headerHeight = isFullscreen ? 20 : 60;
-    const thumbnailsHeight = isFullscreen ? 0 : 100;
-    const containerPadding = isFullscreen ? 20 : 48;
-    const extraMargin = isFullscreen ? 40 : 100;
-    
-    // Calculate available space
-    const availableWidth = window.innerWidth - containerPadding;
-    const availableHeight = window.innerHeight - headerHeight - thumbnailsHeight - containerPadding - extraMargin;
-    
-    // Set maximum dimensions
-    const maxWidth = isFullscreen ? availableWidth : Math.min(availableWidth, 1200);
-    const maxHeight = isFullscreen ? availableHeight : Math.min(availableHeight, 800);
-    
-    // Default comic aspect ratio (height/width) for these high-res pages is closer to 1.4
-    // Measured from the actual PNG dimensions which are typically ~2560x3600px
-    const singlePageAspectRatio = 1.4;
-    
-    // Get the current pages to display
-    const pages = getCurrentPages();
-    
-    // Special handling for the double-page spread (Page11x12 Final.webp at index 11)
-    // Double-page spreads have an aspect ratio that's half of a single page
-    // A single page is taller than wide (1.4:1), a double spread is wider than tall (0.7:1)
-    let spreadViewWidthMultiplier;
-    let aspectRatio;
-    
-    if (pages.length === 1 && pages[0] === 11) {
-      // For the double-page spread, we use a specific aspect ratio
-      // Double-page has approximately half the height:width ratio of a single page
-      aspectRatio = singlePageAspectRatio / 2;
-      // We'll use the height as the limiting factor for the double-page spread
-      // Set a wider multiplier for the container
-      spreadViewWidthMultiplier = 2;
-    } else {
-      // For normal pages in spread view, width is doubled while height stays the same
-      spreadViewWidthMultiplier = pages.length > 1 ? 2 : 1;
-      aspectRatio = singlePageAspectRatio / spreadViewWidthMultiplier;
-    }
-    
-    // Calculate width and height based on available space and aspect ratio
-    let width, height;
-    
-    // For the double-page spread (page 11x12), prioritize maintaining the height
-    if (pages.length === 1 && pages[0] === 11) {
-      // Use max height as the limiting factor for double-page spread
-      height = maxHeight;
-      width = height / aspectRatio;
+    try {
+      console.log('[ComicReader] Starting dimension calculation');
       
-      // If width exceeds maximum, adjust both
-      if (width > maxWidth) {
-        const scaleFactor = maxWidth / width;
-        width = maxWidth;
-        height = height * scaleFactor;
+      if (!containerRef.current) {
+        console.log('[ComicReader] Container ref not available yet');
+        return;
       }
-    } else {
-      // Normal calculation for regular pages
-    if (maxHeight / maxWidth > aspectRatio) {
-      // Width is the limiting factor
-      width = maxWidth;
-      height = width * aspectRatio;
-    } else {
-      // Height is the limiting factor
-      height = maxHeight;
-      width = height / aspectRatio;
+
+      // Get available space (accounting for padding and other elements)
+      const headerHeight = isFullscreen ? 20 : 60;
+      const thumbnailsHeight = isFullscreen ? 0 : 100;
+      const containerPadding = isFullscreen ? 20 : 48;
+      const extraMargin = isFullscreen ? 40 : 100;
+      
+      // Get safer window dimensions
+      const windowWidth = typeof window !== 'undefined' ? window.innerWidth : 1200;
+      const windowHeight = typeof window !== 'undefined' ? window.innerHeight : 800;
+      
+      // Calculate available space
+      const availableWidth = windowWidth - containerPadding;
+      const availableHeight = windowHeight - headerHeight - thumbnailsHeight - containerPadding - extraMargin;
+      
+      console.log('[ComicReader] Available space:', { availableWidth, availableHeight });
+      
+      // Set maximum dimensions - add iOS Chrome specific limits
+      const isIOSChrome = typeof navigator !== 'undefined' && 
+        navigator.userAgent.includes('CriOS') && 
+        /iPhone|iPad|iPod/.test(navigator.userAgent);
+      
+      // Apply stricter limits for iOS Chrome to avoid memory issues
+      const maxWidth = isFullscreen 
+        ? (isIOSChrome ? Math.min(availableWidth, 1000) : availableWidth) 
+        : Math.min(availableWidth, isIOSChrome ? 900 : 1200);
+      
+      const maxHeight = isFullscreen 
+        ? (isIOSChrome ? Math.min(availableHeight, 800) : availableHeight) 
+        : Math.min(availableHeight, isIOSChrome ? 600 : 800);
+      
+      console.log('[ComicReader] Max dimensions:', { maxWidth, maxHeight, isIOSChrome });
+      
+      // Default comic aspect ratio (height/width) for these high-res pages is closer to 1.4
+      // Measured from the actual PNG dimensions which are typically ~2560x3600px
+      const singlePageAspectRatio = 1.4;
+      
+      // Get the current pages to display
+      const pages = getCurrentPages();
+      
+      // Special handling for the double-page spread (Page11x12 Final.webp at index 11)
+      // Double-page spreads have an aspect ratio that's half of a single page
+      // A single page is taller than wide (1.4:1), a double spread is wider than tall (0.7:1)
+      let spreadViewWidthMultiplier;
+      let aspectRatio;
+      
+      if (pages.length === 1 && pages[0] === 11) {
+        // For the double-page spread, we use a specific aspect ratio
+        // Double-page has approximately half the height:width ratio of a single page
+        aspectRatio = singlePageAspectRatio / 2;
+        // We'll use the height as the limiting factor for the double-page spread
+        // Set a wider multiplier for the container
+        spreadViewWidthMultiplier = 2;
+      } else {
+        // For normal pages in spread view, width is doubled while height stays the same
+        spreadViewWidthMultiplier = pages.length > 1 ? 2 : 1;
+        aspectRatio = singlePageAspectRatio / spreadViewWidthMultiplier;
       }
+      
+      console.log('[ComicReader] Aspect ratio calculation:', { 
+        aspectRatio, 
+        spreadViewWidthMultiplier, 
+        pages 
+      });
+      
+      // Calculate width and height based on available space and aspect ratio
+      let width, height;
+      
+      // For the double-page spread (page 11x12), prioritize maintaining the height
+      if (pages.length === 1 && pages[0] === 11) {
+        // Use max height as the limiting factor for double-page spread
+        height = maxHeight;
+        width = height / aspectRatio;
+        
+        // If width exceeds maximum, adjust both
+        if (width > maxWidth) {
+          const scaleFactor = maxWidth / width;
+          width = maxWidth;
+          height = height * scaleFactor;
+        }
+      } else {
+        // Normal calculation for regular pages
+        if (maxHeight / maxWidth > aspectRatio) {
+          // Width is the limiting factor
+          width = maxWidth;
+          height = width * aspectRatio;
+        } else {
+          // Height is the limiting factor
+          height = maxHeight;
+          width = height / aspectRatio;
+        }
+      }
+      
+      // For iOS Chrome, ensure dimensions are not too large to avoid memory issues
+      if (isIOSChrome) {
+        const maxIOSChromeWidth = 1200;
+        const maxIOSChromeHeight = 1600;
+        
+        if (width > maxIOSChromeWidth) {
+          const scale = maxIOSChromeWidth / width;
+          width = maxIOSChromeWidth;
+          height *= scale;
+        }
+        
+        if (height > maxIOSChromeHeight) {
+          const scale = maxIOSChromeHeight / height;
+          height = maxIOSChromeHeight;
+          width *= scale;
+        }
+      }
+      
+      console.log('[ComicReader] Final dimensions:', { width, height });
+      
+      // Debounce the state update to avoid rapid re-renders
+      const newDimensions = { width, height };
+      // Only update if there's a significant change to avoid render loops
+      if (Math.abs(dimensions.width - width) > 5 || Math.abs(dimensions.height - height) > 5) {
+        setDimensions(newDimensions);
+      }
+    } catch (error) {
+      console.error('[ComicReader] Error calculating dimensions:', error);
+      // Set safe fallback dimensions to avoid complete failure
+      setDimensions({ width: 800, height: 1120 });
     }
-    
-    setDimensions({ width, height });
   };
 
   // Handle fullscreen toggle
@@ -522,7 +582,7 @@ const ComicReader = () => {
     };
   }, [showLegend]);
 
-  // Function to safely render Image components
+  // Function to safely render Image components with iOS Chrome optimizations
   const safeRenderImage = (pageIndex: number, i: number, isDoublePage: boolean, isVisible: boolean, isLoaded: boolean) => {
     console.log(`[ComicReader] Rendering image for page ${pageIndex}`, {
       isDoublePage,
@@ -531,15 +591,31 @@ const ComicReader = () => {
     });
     
     try {
-      return isVisible ? (
+      // Only render if the image should be visible
+      if (!isVisible) return null;
+      
+      // Check if we're on iOS Chrome for additional optimizations
+      const isIOSChrome = typeof navigator !== 'undefined' && 
+        navigator.userAgent.includes('CriOS') && 
+        /iPhone|iPad|iPod/.test(navigator.userAgent);
+      
+      // Use lower quality for iOS Chrome to reduce memory usage
+      const imageQuality = isIOSChrome ? 60 : 80;
+      
+      // Extra optimization for iOS Chrome - use smaller image sizes
+      const sizeAttribute = pagesToShow.length > 1 || isDoublePage 
+        ? (isDoublePage ? "100vw" : "50vw") 
+        : "100vw";
+      
+      return (
         <Image
           src={COMIC_PAGES[pageIndex].src}
           alt={COMIC_PAGES[pageIndex].alt}
           fill
           className={`object-contain ${isDoublePage ? 'object-fit-contain' : ''} transition-opacity duration-300 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
           priority={i === 0} // Only prioritize the first visible page
-          sizes={pagesToShow.length > 1 || isDoublePage ? (isDoublePage ? "100vw" : "50vw") : "100vw"}
-          quality={80}
+          sizes={sizeAttribute}
+          quality={imageQuality}
           onLoad={() => {
             console.log(`[ComicReader] Image loaded for page ${pageIndex}`);
             handlePageLoad(pageIndex);
@@ -549,14 +625,14 @@ const ComicReader = () => {
             handlePageLoadStart(pageIndex);
           }}
           loading={i === 0 ? "eager" : "lazy"}
-          unoptimized
+          unoptimized={!isIOSChrome} // Use Next.js optimization on iOS Chrome
           onError={(e) => {
             console.log(`[ComicReader] Image loading error for page ${pageIndex}:`, e);
             console.error(`Error loading image for page ${pageIndex}:`, e);
             setRenderError(`Failed to load page ${pageIndex}`);
           }}
         />
-      ) : null;
+      );
     } catch (error) {
       console.log(`[ComicReader] Error in safeRenderImage for page ${pageIndex}:`, error);
       console.error(`Error rendering image for page ${pageIndex}:`, error);
