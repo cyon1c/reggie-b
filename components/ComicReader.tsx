@@ -273,45 +273,33 @@ const ComicReader = () => {
 
   // Calculate optimal dimensions based on viewport and container
   const calculateDimensions = () => {
+    if (!containerRef.current) return;
+
     try {
-      console.log('[ComicReader] Starting dimension calculation');
-      
-      if (!containerRef.current) {
-        console.log('[ComicReader] Container ref not available yet');
+      // Simple approach: use fixed dimensions for iOS Chrome
+      const isIOSChrome = typeof navigator !== 'undefined' && 
+        navigator.userAgent.includes('CriOS') && 
+        /iPhone|iPad|iPod/.test(navigator.userAgent);
+
+      if (isIOSChrome) {
+        // Use safe, fixed dimensions for iOS Chrome to avoid crashes
+        setDimensions({ width: 800, height: 1100 });
         return;
       }
 
-      // Get available space (accounting for padding and other elements)
+      // Regular calculation for other browsers
       const headerHeight = isFullscreen ? 20 : 60;
       const thumbnailsHeight = isFullscreen ? 0 : 100;
       const containerPadding = isFullscreen ? 20 : 48;
       const extraMargin = isFullscreen ? 40 : 100;
       
-      // Get safer window dimensions
-      const windowWidth = typeof window !== 'undefined' ? window.innerWidth : 1200;
-      const windowHeight = typeof window !== 'undefined' ? window.innerHeight : 800;
-      
       // Calculate available space
-      const availableWidth = windowWidth - containerPadding;
-      const availableHeight = windowHeight - headerHeight - thumbnailsHeight - containerPadding - extraMargin;
+      const availableWidth = window.innerWidth - containerPadding;
+      const availableHeight = window.innerHeight - headerHeight - thumbnailsHeight - containerPadding - extraMargin;
       
-      console.log('[ComicReader] Available space:', { availableWidth, availableHeight });
-      
-      // Set maximum dimensions - add iOS Chrome specific limits
-      const isIOSChrome = typeof navigator !== 'undefined' && 
-        navigator.userAgent.includes('CriOS') && 
-        /iPhone|iPad|iPod/.test(navigator.userAgent);
-      
-      // Apply stricter limits for iOS Chrome to avoid memory issues
-      const maxWidth = isFullscreen 
-        ? (isIOSChrome ? Math.min(availableWidth, 1000) : availableWidth) 
-        : Math.min(availableWidth, isIOSChrome ? 900 : 1200);
-      
-      const maxHeight = isFullscreen 
-        ? (isIOSChrome ? Math.min(availableHeight, 800) : availableHeight) 
-        : Math.min(availableHeight, isIOSChrome ? 600 : 800);
-      
-      console.log('[ComicReader] Max dimensions:', { maxWidth, maxHeight, isIOSChrome });
+      // Set maximum dimensions
+      const maxWidth = isFullscreen ? availableWidth : Math.min(availableWidth, 1200);
+      const maxHeight = isFullscreen ? availableHeight : Math.min(availableHeight, 800);
       
       // Default comic aspect ratio (height/width) for these high-res pages is closer to 1.4
       // Measured from the actual PNG dimensions which are typically ~2560x3600px
@@ -338,12 +326,6 @@ const ComicReader = () => {
         spreadViewWidthMultiplier = pages.length > 1 ? 2 : 1;
         aspectRatio = singlePageAspectRatio / spreadViewWidthMultiplier;
       }
-      
-      console.log('[ComicReader] Aspect ratio calculation:', { 
-        aspectRatio, 
-        spreadViewWidthMultiplier, 
-        pages 
-      });
       
       // Calculate width and height based on available space and aspect ratio
       let width, height;
@@ -373,36 +355,11 @@ const ComicReader = () => {
         }
       }
       
-      // For iOS Chrome, ensure dimensions are not too large to avoid memory issues
-      if (isIOSChrome) {
-        const maxIOSChromeWidth = 1200;
-        const maxIOSChromeHeight = 1600;
-        
-        if (width > maxIOSChromeWidth) {
-          const scale = maxIOSChromeWidth / width;
-          width = maxIOSChromeWidth;
-          height *= scale;
-        }
-        
-        if (height > maxIOSChromeHeight) {
-          const scale = maxIOSChromeHeight / height;
-          height = maxIOSChromeHeight;
-          width *= scale;
-        }
-      }
-      
-      console.log('[ComicReader] Final dimensions:', { width, height });
-      
-      // Debounce the state update to avoid rapid re-renders
-      const newDimensions = { width, height };
-      // Only update if there's a significant change to avoid render loops
-      if (Math.abs(dimensions.width - width) > 5 || Math.abs(dimensions.height - height) > 5) {
-        setDimensions(newDimensions);
-      }
+      setDimensions({ width, height });
     } catch (error) {
-      console.error('[ComicReader] Error calculating dimensions:', error);
-      // Set safe fallback dimensions to avoid complete failure
-      setDimensions({ width: 800, height: 1120 });
+      console.error('[ComicReader] Error in dimension calculation:', error);
+      // Use safe fallback dimensions
+      setDimensions({ width: 800, height: 1100 });
     }
   };
 
@@ -582,30 +539,15 @@ const ComicReader = () => {
     };
   }, [showLegend]);
 
-  // Function to safely render Image components with iOS Chrome optimizations
+  // Function to safely render Image components
   const safeRenderImage = (pageIndex: number, i: number, isDoublePage: boolean, isVisible: boolean, isLoaded: boolean) => {
-    console.log(`[ComicReader] Rendering image for page ${pageIndex}`, {
-      isDoublePage,
-      isVisible,
-      isLoaded
-    });
+    if (!isVisible) return null;
     
     try {
-      // Only render if the image should be visible
-      if (!isVisible) return null;
-      
-      // Check if we're on iOS Chrome for additional optimizations
+      // Detect iOS Chrome
       const isIOSChrome = typeof navigator !== 'undefined' && 
         navigator.userAgent.includes('CriOS') && 
         /iPhone|iPad|iPod/.test(navigator.userAgent);
-      
-      // Use lower quality for iOS Chrome to reduce memory usage
-      const imageQuality = isIOSChrome ? 60 : 80;
-      
-      // Extra optimization for iOS Chrome - use smaller image sizes
-      const sizeAttribute = pagesToShow.length > 1 || isDoublePage 
-        ? (isDoublePage ? "100vw" : "50vw") 
-        : "100vw";
       
       return (
         <Image
@@ -614,27 +556,19 @@ const ComicReader = () => {
           fill
           className={`object-contain ${isDoublePage ? 'object-fit-contain' : ''} transition-opacity duration-300 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
           priority={i === 0} // Only prioritize the first visible page
-          sizes={sizeAttribute}
-          quality={imageQuality}
-          onLoad={() => {
-            console.log(`[ComicReader] Image loaded for page ${pageIndex}`);
-            handlePageLoad(pageIndex);
-          }}
-          onLoadStart={() => {
-            console.log(`[ComicReader] Image load started for page ${pageIndex}`);
-            handlePageLoadStart(pageIndex);
-          }}
+          sizes={pagesToShow.length > 1 || isDoublePage ? (isDoublePage ? "100vw" : "50vw") : "100vw"}
+          quality={isIOSChrome ? 50 : 80}
+          onLoad={() => handlePageLoad(pageIndex)}
+          onLoadStart={() => handlePageLoadStart(pageIndex)}
           loading={i === 0 ? "eager" : "lazy"}
-          unoptimized={!isIOSChrome} // Use Next.js optimization on iOS Chrome
+          unoptimized={!isIOSChrome}
           onError={(e) => {
-            console.log(`[ComicReader] Image loading error for page ${pageIndex}:`, e);
             console.error(`Error loading image for page ${pageIndex}:`, e);
             setRenderError(`Failed to load page ${pageIndex}`);
           }}
         />
       );
     } catch (error) {
-      console.log(`[ComicReader] Error in safeRenderImage for page ${pageIndex}:`, error);
       console.error(`Error rendering image for page ${pageIndex}:`, error);
       setRenderError(`Failed to render page ${pageIndex}`);
       return <div className="w-full h-full flex items-center justify-center bg-black text-primary">Error loading image</div>;
